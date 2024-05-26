@@ -1,16 +1,6 @@
-﻿/*******************************************************************************************
-*
-*   raylib [core] example - Keyboard input
-*
-*   This example has been created using raylib 1.0 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
-*
-*   Copyright (c) 2014 Ramon Santamaria (@raysan5)
-*
-********************************************************************************************/
-
-using System.Numerics;
+﻿using System.Numerics;
 using Raylib_cs;
+
 using static Raylib_cs.Raylib;
 
 namespace Examples.Core;
@@ -22,33 +12,35 @@ public class InputKeys
         
         // Initialization
         //--------------------------------------------------------------------------------------
-        const int screenWidth = 800;
-        const int screenHeight = 450;
+        const int screenWidth = 1200;
+        const int screenHeight = 800;
+        const int gridSizeX = 25;
+        const int gridSizeY = 17;
 
-        InitWindow(screenWidth, screenHeight, "raylib [core] example - keyboard input");
+        InitWindow(screenWidth, screenHeight, "Morio Maker");
+        Image windowIcon = LoadImage("assets/morio.png"); 
+        SetWindowIcon(windowIcon);
 
         Vector2 ballPosition = new((float)screenWidth / 2, (float)screenHeight / 2);
 
         SetTargetFPS(60);       // Set target frames-per-second
-<<<<<<< Updated upstream
-=======
 
-        Rectangle src = new(0, 0, 100, 100);
-        Texture2D mario = LoadTexture("assets/mario.png");
+        Rectangle src = new(48.0f, 0.0f, 16.0f, 16.0f);
+        Texture2D block = LoadTexture("assets/blocks.png");
 
         Tile[,] tiles = new Tile[gridSizeY, gridSizeX];
         for (int j = 0; j < gridSizeY; j++) {
                for (int i = 0; i < gridSizeX; i++) {
-                tiles[j,i] = new Tile(TileType.Mario);
+                tiles[j,i] = new Tile(TileType.Block);
             } 
         }
 
->>>>>>> Stashed changes
         //--------------------------------------------------------------------------------------
 
         // Main game loop
         while (!WindowShouldClose())
         {
+
             // Update
             //----------------------------------------------------------------------------------
             if (IsKeyDown(KeyboardKey.Right))
@@ -58,7 +50,7 @@ public class InputKeys
 
             if (IsKeyDown(KeyboardKey.Left))
             {
-                ballPosition.X -= 2.0f;
+                ballPosition.X -= 2.0f; //fdsfas
             }
 
             if (IsKeyDown(KeyboardKey.Up))
@@ -77,9 +69,14 @@ public class InputKeys
             BeginDrawing();
             ClearBackground(Color.RayWhite);
 
-            DrawText("move the ball with arrow keys", 10, 10, 20, Color.DarkGray);
+            for (int j = 0; j < gridSizeY; j++) {
+               for (int i = 0; i < gridSizeX; i++) {
+                    Vector2 pos = new Vector2(i * 48, j * 48);
+                    DrawTexturePro(block, src, new Rectangle(pos, new Vector2(48.0f, 48.0f)), new Vector2(0.0f, 0.0f), 0.0f, Color.RayWhite );
 
-            DrawCircleV(ballPosition, 50, Color.Maroon);
+                }
+            } 
+        
 
             EndDrawing();
             //----------------------------------------------------------------------------------
@@ -92,4 +89,18 @@ public class InputKeys
 
         return 0;
     }
+}
+
+class Tile {
+    TileType type = TileType.Empty;
+
+    public Tile(TileType _type) {
+        type = _type;
+
+    }
+}
+
+enum TileType {
+    Empty,
+    Block,
 }
