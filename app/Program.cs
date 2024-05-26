@@ -30,6 +30,20 @@ public class InputKeys
         Vector2 ballPosition = new((float)screenWidth / 2, (float)screenHeight / 2);
 
         SetTargetFPS(60);       // Set target frames-per-second
+<<<<<<< Updated upstream
+=======
+
+        Rectangle src = new(0, 0, 100, 100);
+        Texture2D mario = LoadTexture("assets/mario.png");
+
+        Tile[,] tiles = new Tile[gridSizeY, gridSizeX];
+        for (int j = 0; j < gridSizeY; j++) {
+               for (int i = 0; i < gridSizeX; i++) {
+                tiles[j,i] = new Tile(TileType.Mario);
+            } 
+        }
+
+>>>>>>> Stashed changes
         //--------------------------------------------------------------------------------------
 
         // Main game loop
@@ -44,7 +58,7 @@ public class InputKeys
 
             if (IsKeyDown(KeyboardKey.Left))
             {
-                ballPosition.X -= 2.0f; //fdsfas
+                ballPosition.X -= 2.0f;
             }
 
             if (IsKeyDown(KeyboardKey.Up))
