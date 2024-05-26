@@ -11,6 +11,7 @@
 
 using System.Numerics;
 using Raylib_cs;
+
 using static Raylib_cs.Raylib;
 
 namespace Examples.Core;
@@ -23,18 +24,32 @@ public class InputKeys
         // Initialization
         //--------------------------------------------------------------------------------------
         const int screenWidth = 800;
-        const int screenHeight = 450;
+        const int screenHeight = 800;
+        const int gridSizeX = 8;
+        const int gridSizeY = 8;
 
         InitWindow(screenWidth, screenHeight, "raylib [core] example - keyboard input");
 
         Vector2 ballPosition = new((float)screenWidth / 2, (float)screenHeight / 2);
 
         SetTargetFPS(60);       // Set target frames-per-second
+
+        Rectangle src = new(0, 0, 100, 100);
+        Texture2D mario = LoadTexture("mario.png");
+
+        Tile[,] tiles = new Tile[gridSizeY, gridSizeX];
+        for (int j = 0; j < gridSizeY; j++) {
+               for (int i = 0; i < gridSizeX; i++) {
+                tiles[j,i] = new Tile(TileType.Mario);
+            } 
+        }
+
         //--------------------------------------------------------------------------------------
 
         // Main game loop
         while (!WindowShouldClose())
         {
+
             // Update
             //----------------------------------------------------------------------------------
             if (IsKeyDown(KeyboardKey.Right))
@@ -63,9 +78,13 @@ public class InputKeys
             BeginDrawing();
             ClearBackground(Color.RayWhite);
 
-            DrawText("move the ball with arrow keys", 10, 10, 20, Color.DarkGray);
-
-            DrawCircleV(ballPosition, 50, Color.Maroon);
+            for (int j = 0; j < gridSizeY; j++) {
+               for (int i = 0; i < gridSizeX; i++) {
+                    Vector2 pos = new Vector2(i * 100, j * 100);
+                    DrawTextureEx(mario, pos, 0.0F, 0.4F, Color.RayWhite );
+               }
+            } 
+        
 
             EndDrawing();
             //----------------------------------------------------------------------------------
@@ -79,3 +98,36 @@ public class InputKeys
         return 0;
     }
 }
+
+class Tile {
+    TileType type = TileType.Mario;
+
+    public Tile(TileType _type) {
+        type = _type;
+
+    }
+}
+
+enum TileType {
+    Empty,
+    Mario,
+    Block,
+}
+
+
+/*
+class Game 
+    tiles: List<List<Tile>>
+
+class Tile 
+    type: TileType
+
+enum TileType
+    Empty
+    Mario
+    Block
+    etc.
+
+
+
+*/
