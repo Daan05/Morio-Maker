@@ -30,12 +30,14 @@ public class InputKeys
         const int screenHeight = 816;
 
 
-        InitWindow(screenWidth, screenHeight, "raylib [core] example - keyboard input");
-        SetTargetFPS(60);       // Set target frames-per-second
+        InitWindow(screenWidth, screenHeight, "Morio Maker");
+
+        Image windowIcon = LoadImage("assets/morio.png"); 
+        SetWindowIcon(windowIcon);
+
+        SetTargetFPS(60);
 
         Game game = new Game();
-
-        //--------------------------------------------------------------------------------------
 
         // Main game loop
         while (!WindowShouldClose())
