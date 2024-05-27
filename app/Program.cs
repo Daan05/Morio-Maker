@@ -18,76 +18,38 @@ namespace Examples.Core;
 
 public class InputKeys
 {
+    const int gridSizeX = 26;
+    const int gridSizeY = 18;
+
     public static int Main()
     {
-        
+
         // Initialization
         //--------------------------------------------------------------------------------------
-        const int screenWidth = 800;
-        const int screenHeight = 800;
-        const int gridSizeX = 8;
-        const int gridSizeY = 8;
+        const int screenWidth = 1200;
+        const int screenHeight = 816;
+
 
         InitWindow(screenWidth, screenHeight, "raylib [core] example - keyboard input");
-
-        Vector2 ballPosition = new((float)screenWidth / 2, (float)screenHeight / 2);
-
         SetTargetFPS(60);       // Set target frames-per-second
 
-        Rectangle src = new(0, 0, 100, 100);
-        Texture2D mario = LoadTexture("mario.png");
-
-        Tile[,] tiles = new Tile[gridSizeY, gridSizeX];
-        for (int j = 0; j < gridSizeY; j++) {
-               for (int i = 0; i < gridSizeX; i++) {
-                tiles[j,i] = new Tile(TileType.Mario);
-            } 
-        }
+        Game game = new Game();
 
         //--------------------------------------------------------------------------------------
 
         // Main game loop
         while (!WindowShouldClose())
         {
-
             // Update
-            //----------------------------------------------------------------------------------
-            if (IsKeyDown(KeyboardKey.Right))
-            {
-                ballPosition.X += 2.0f;
-            }
+            game.Update();
 
-            if (IsKeyDown(KeyboardKey.Left))
-            {
-                ballPosition.X -= 2.0f; //fdsfas
-            }
-
-            if (IsKeyDown(KeyboardKey.Up))
-            {
-                ballPosition.Y -= 2.0f;
-            }
-
-            if (IsKeyDown(KeyboardKey.Down))
-            {
-                ballPosition.Y += 2.0f;
-            }
-            //----------------------------------------------------------------------------------
-
-            // Draw
-            //----------------------------------------------------------------------------------
+            // Render
             BeginDrawing();
             ClearBackground(Color.RayWhite);
 
-            for (int j = 0; j < gridSizeY; j++) {
-               for (int i = 0; i < gridSizeX; i++) {
-                    Vector2 pos = new Vector2(i * 100, j * 100);
-                    DrawTextureEx(mario, pos, 0.0F, 0.4F, Color.RayWhite );
-               }
-            } 
-        
+            game.Render();
 
             EndDrawing();
-            //----------------------------------------------------------------------------------
         }
 
         // De-Initialization
@@ -97,37 +59,127 @@ public class InputKeys
 
         return 0;
     }
-}
 
-class Tile {
-    TileType type = TileType.Mario;
+    class Game
+    {
+        Tile[,] tiles;
+        Morio morio;
+        Texture2D block_tex;
 
-    public Tile(TileType _type) {
-        type = _type;
+        public Game()
+        {
+            Tile[,] _tiles = new Tile[gridSizeY, gridSizeX];
+            for (int j = 0; j < gridSizeY; j++)
+            {
+                for (int i = 0; i < gridSizeX; i++)
+                {
+                    if (gridSizeY - j <= 2)
+                    {
+                        _tiles[j, i] = new Tile(TileType.Block);
 
+                    }
+                    else
+                    {
+                        _tiles[j, i] = new Tile(TileType.Empty);
+                    }
+                }
+            }
+
+            tiles = _tiles;
+            morio = new Morio();
+            block_tex = LoadTexture("assets/blocks.png");
+        }
+
+        public void Update()
+        {
+            morio.Update();
+        }
+
+        public void Render()
+        {
+            Rectangle src = new(48.0f, 0.0f, 16.0f, 16.0f);
+            Vector2 origin = new Vector2(48.0f, 48.0f);
+
+            for (int j = 0; j < gridSizeY; j++)
+            {
+                for (int i = 0; i < gridSizeX; i++)
+                {
+                    if (tiles[j, i].type == TileType.Block)
+                    {
+                        Vector2 pos = new Vector2(i * 48.0f, j * 48.0f);
+                        Rectangle dest = new Rectangle(pos, origin);
+
+                        DrawTexturePro(block_tex, src, dest, origin, 0.0f, Color.RayWhite);
+                    }
+
+                }
+            }
+
+            morio.Render();
+        }
+    }
+
+    class Tile
+    {
+        public TileType type = TileType.Block;
+
+        public Tile(TileType _type)
+        {
+            type = _type;
+        }
+    }
+
+    enum TileType
+    {
+        Empty,
+        Block,
     }
 }
 
-enum TileType {
-    Empty,
-    Mario,
-    Block,
+class Morio
+{
+    Texture2D tex;
+    int x; // these probably need to be converted to floats
+    int y;
+    
+    const int Speed = 5;
+
+    public Morio()
+    {
+        tex = LoadTexture("assets/morio.png");
+        x = 0;
+        y = 0;
+    }
+
+    public void Update()
+    {
+
+        if (IsKeyDown(KeyboardKey.Right))
+        {
+            x += Speed;
+        }
+
+        if (IsKeyDown(KeyboardKey.Left))
+        {
+            x -= Speed;
+        }
+
+        if (IsKeyDown(KeyboardKey.Up))
+        {
+            y -= Speed;
+        }
+
+        if (IsKeyDown(KeyboardKey.Down))
+        {
+            y += Speed;
+        }
+    }
+
+    public void Render()
+    {
+        Vector2 pos = new Vector2(x, y);
+        DrawTextureEx(tex, pos, 0.0F, 0.4F, Color.RayWhite);
+    }
 }
 
 
-/*
-class Game 
-    tiles: List<List<Tile>>
-
-class Tile 
-    type: TileType
-
-enum TileType
-    Empty
-    Mario
-    Block
-    etc.
-
-
-
-*/
