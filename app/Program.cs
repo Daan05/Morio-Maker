@@ -158,7 +158,7 @@ class Morio
 
         if (IsKeyDown(KeyboardKey.Right))
         {
-            x += Speed;
+            x += Speed; //dsafsd
         }
 
         if (IsKeyDown(KeyboardKey.Left))
