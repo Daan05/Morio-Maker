@@ -9,7 +9,6 @@ public class Program
 {
     public static int Main()
     {
-        
         // Initialization
         //--------------------------------------------------------------------------------------
         const int screenWidth = 1200;
