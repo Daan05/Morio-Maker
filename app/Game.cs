@@ -20,7 +20,15 @@ class Game
     Morio morio;
     Texture2D blocksTex;
     Rectangle[] blockTextureSourceRects = {
-        new(48.0f, 0.0f, 16.0f, 16.0f)
+        new(0.0f, 0.0f, 16.0f, 16.0f),
+        new(17.0f, 0.0f, 16.0f, 16.0f),
+        new(34.0f, 0.0f, 16.0f, 16.0f),
+        new(0.0f, 17.0f, 16.0f, 16.0f),
+        new(17.0f, 17.0f, 16.0f, 16.0f),
+        new(34.0f, 17.0f, 16.0f, 16.0f),
+        new(0.0f, 34.0f, 16.0f, 16.0f),
+        new(17.0f, 34.0f, 16.0f, 16.0f),
+        new(34.0f, 34.0f, 16.0f, 16.0f),
     };
 
     public Game(int _screenWidth, int _screenHeight)
@@ -28,7 +36,7 @@ class Game
         ScreenWidth = _screenWidth;
         ScreenHeight = _screenHeight;
 
-        GridSizeX = 20;
+        GridSizeX = 34;
         GridSizeY = 10;
 
         MapWidth = (int)(GridSizeX * BlockSize);
@@ -36,21 +44,21 @@ class Game
 
         // Map
         TileType[,] _tiles = {
-            { TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, },
-            { TileType.Block, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Block, },
-            { TileType.Block, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Block, },
-            { TileType.Block, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Block, },
-            { TileType.Block, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Block, },
-            { TileType.Block, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Block, },
-            { TileType.Block, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Block, },
-            { TileType.Block, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Block, },
-            { TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, },
-            { TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, },
+            { TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, },
+            { TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, },
+            { TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, },
+            { TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, },
+            { TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, },
+            { TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, },
+            { TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, },
+            { TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, },
+            { TileType.Empty, TileType.Empty, TileType.Grass_TL, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TR, TileType.Empty, TileType.Empty, },
+            { TileType.Empty, TileType.Empty, TileType.Grass_ML, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MR, TileType.Empty, TileType.Empty, },
         };
 
         tiles = _tiles;
         morio = new Morio();
-        blocksTex = LoadTexture("assets/blocks.png");
+        blocksTex = LoadTexture("assets/tiles.png");
 
     }
 
@@ -79,5 +87,8 @@ class Game
             }
         }
         morio.Render();
+
+        DrawLine(0 - (int)morio.x, 0, 0 - (int)morio.x, 1024, Color.Red);
+        DrawLine(34 * (int)BlockSize - (int)morio.x, 0, 34 * (int)BlockSize - (int)morio.x + 5, 1024, Color.Red);
     }
 }
