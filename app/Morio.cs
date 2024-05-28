@@ -12,6 +12,8 @@ class Morio
     uint frameCount = 0; 
     Rectangle[] animationFrames = {
         new(16, 8, 16, 32),
+        new(68, 8, 16, 32),
+        new(121, 8, 16, 32),
     };
 
     const int Speed = 5;
@@ -61,19 +63,15 @@ class Morio
         Rectangle src;
         if (moving)
         {
-            src = animationFrames[((frameCount / 10) % 1) + 0];
+            src = animationFrames[((frameCount / 6) % 3)];
         }
         else
         {
-            src = animationFrames[0];
+            src = animationFrames[2];
         }
         Vector2 pos = new(887, y);
         Rectangle dest = new(pos, 108, 216);
         
         DrawTexturePro(tex, src, dest, origin, 0.0f, Color.RayWhite);
-        // ((frameCount / 10) % 3) + 4
-        // framecount / 10 = every animation tick on screen for 1/6th second (at 60 fps)
-        // % 3 = there are 3 images that are part of the walking animation
-        // + 4 = start at index 4 (so index 4, 5, 6 are for walking)
     }
 }
