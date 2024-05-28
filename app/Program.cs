@@ -29,7 +29,6 @@ public class Program
         while (!WindowShouldClose())
         {     
             // Update
-            DrawFPS(10, 10);
             game.Update();
 
             // Render
@@ -38,6 +37,7 @@ public class Program
 
             game.Render();
 
+            DrawFPS(10, 10);
             EndDrawing();
         }
 

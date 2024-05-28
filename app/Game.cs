@@ -34,24 +34,7 @@ class Game
         MapWidth = (int)(GridSizeX * BlockSize);
         MapHeight = (int)(GridSizeY * BlockSize);
 
-        /*
-        Tile[,] _tiles = new Tile[GridSizeY, GridSizeX];
-        for (int j = 0; j < GridSizeY; j++)
-        {
-            for (int i = 0; i < GridSizeX; i++)
-            {
-                if (GridSizeY - j <= 2)
-                {
-                    _tiles[j, i] = new Tile(TileType.Block);
-                }
-                else
-                {
-                    _tiles[j, i] = new Tile(TileType.Empty);
-                }
-            }
-        }
-        */
-
+        // Map
         TileType[,] _tiles = {
             { TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, TileType.Block, },
             { TileType.Block, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Block, },
