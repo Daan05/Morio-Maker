@@ -18,7 +18,7 @@ public class Program
         InitWindow(screenWidth, screenHeight, "Morio Maker");
         Image windowIcon = LoadImage("assets/morio.png"); 
         SetWindowIcon(windowIcon);
-
+ 
         SetTargetFPS(60);
 
         Game game = new Game(screenWidth, screenHeight);
@@ -27,14 +27,14 @@ public class Program
 
         // Main game loop
         while (!WindowShouldClose())
-        {     
-            // Update
+        {
             game.Update();
 
             // Render
             BeginDrawing();
             ClearBackground(Color.RayWhite);
 
+            DrawFPS(10, 10);
             game.Render();
 
             DrawFPS(10, 10);
@@ -45,7 +45,5 @@ public class Program
         //--------------------------------------------------------------------------------------
 
         CloseWindow();
-
-        //--------------------------------------------------------------------------------------
     }
 }
