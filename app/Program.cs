@@ -7,45 +7,36 @@ namespace MorioMaker;
 
 public class Program
 {
-    // these consts are defined twice, should be fixed
+    // these consts are also defined in Game, should be fixed
     public const int ScreenWidth = 1200;
     public const int ScreenHeight = 816;
 
     public static int Main()
     {
-        // Initialization
-        //--------------------------------------------------------------------------------------
-
-
         InitWindow(ScreenWidth, ScreenHeight, "Morio Maker");
         Image windowIcon = LoadImage("assets/morio.png");
-        SetWindowIcon(windowIcon);
-        SetTargetFPS(60);       // Set target frames-per-second
 
-        //--------------------------------------------------------------------------------------
+        SetWindowIcon(windowIcon);
+        SetTargetFPS(60);
 
         Game game = new Game();
 
         // Main loop
         while (!WindowShouldClose())
         {
-            DrawFPS(10, 10);
-
             game.Update();
 
             // Render
             BeginDrawing();
             ClearBackground(Color.RayWhite);
 
+            DrawFPS(10, 10);
             game.Render();
 
             EndDrawing();
         }
 
-        // De-Initialization
-        //--------------------------------------------------------------------------------------
         CloseWindow();
-        //--------------------------------------------------------------------------------------
 
         return 0;
     }
@@ -73,12 +64,12 @@ enum TileType
 class Game
 {
     // these consts are defined twice, should be fixed
-    public const int ScreenWidth = 1200; // these consts get exact integers when you divide by 48
-    public const int ScreenHeight = 816;
+    const int ScreenWidth = 1200; // these consts should get exact integers when you divide by 48
+    const int ScreenHeight = 816;
 
     const float BlockSize = 48.0f;
-    const int GridSizeX = ScreenWidth / (int)BlockSize;
-    const int GridSizeY = ScreenHeight / (int)BlockSize;
+    const int GridSizeX = (int)((float)ScreenWidth / BlockSize); // should be 25, is 24 probably
+    const int GridSizeY = (int)((float)ScreenHeight / BlockSize);
 
     const int MapWidth = (int)(GridSizeX * BlockSize);
     const int MapHeight = (int)(GridSizeY * BlockSize);
