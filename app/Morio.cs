@@ -11,22 +11,7 @@ class Morio
 
     uint frameCount = 0; 
     Rectangle[] animationFrames = {
-        new(0, 0, 18, 36),
-        new(18, 0, 18, 36),
-        new(36, 0, 18, 36),
-        new(54, 0, 18, 36),
-        new(72, 0, 18, 36),
-        new(90, 0, 18, 36),
-        new(108, 0, 18, 36),
-        new(126, 0, 18, 36),
-        new(144, 0, 18, 36),
-        new(162, 0, 18, 36),
-        new(180, 0, 18, 36),
-        new(198, 0, 18, 36),
-        new(216, 0, 18, 36),
-        new(234, 0, 18, 36),
-        new(252, 0, 18, 36),
-
+        new(16, 8, 16, 32),
     };
 
     const int Speed = 5;
@@ -34,7 +19,7 @@ class Morio
 
     public Morio()
     {
-        tex = LoadTexture("assets/morio_and_items.png");
+        tex = LoadTexture("assets/newmorio.png");
         x = 896;
         y = 0;
     }
@@ -76,7 +61,7 @@ class Morio
         Rectangle src;
         if (moving)
         {
-            src = animationFrames[((frameCount / 10) % 3) + 4];
+            src = animationFrames[((frameCount / 10) % 1) + 0];
         }
         else
         {
