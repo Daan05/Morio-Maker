@@ -6,15 +6,15 @@ using static Raylib_cs.Raylib;
 class Morio
 {
     Texture2D tex;
-    int x; // these probably need to be converted to floats
-    int y;
+    public float x;
+    public float y;
 
     const int Speed = 5;
 
     public Morio()
     {
         tex = LoadTexture("assets/morio.png");
-        x = 0;
+        x = 896;
         y = 0;
     }
 
@@ -44,7 +44,7 @@ class Morio
 
     public void Render()
     {
-        Vector2 pos = new(x, y);
+        Vector2 pos = new(856, y);
         DrawTextureEx(tex, pos, 0.0F, 0.4F, Color.RayWhite);
     }
 }

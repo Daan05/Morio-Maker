@@ -12,8 +12,8 @@ public class Program
         // Initialization
         //--------------------------------------------------------------------------------------
 
-        const int screenWidth = 1200;
-        const int screenHeight = 816;
+        const int screenWidth = 1792;
+        const int screenHeight = 1024;
 
         InitWindow(screenWidth, screenHeight, "Morio Maker");
         Image windowIcon = LoadImage("assets/morio.png"); 
