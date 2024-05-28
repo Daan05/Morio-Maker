@@ -7,44 +7,45 @@ namespace MorioMaker;
 
 public class Program
 {
-    // Initialization
-    //--------------------------------------------------------------------------------------
-    
-    const int screenWidth = 1200;
-    const int screenHeight = 816;
+    static public void Main()
+    {
+        // Initialization
+        //--------------------------------------------------------------------------------------
 
-    InitWindow(screenWidth, screenHeight, "Morio Maker");
-    Image windowIcon = LoadImage("assets/morio.png"); 
-    SetWindowIcon(windowIcon);
+        const int screenWidth = 1200;
+        const int screenHeight = 816;
 
-    SetTargetFPS(60);
+        InitWindow(screenWidth, screenHeight, "Morio Maker");
+        Image windowIcon = LoadImage("assets/morio.png"); 
+        SetWindowIcon(windowIcon);
 
-    Game game = new Game(screenWidth, screenHeight);
-    
-    //--------------------------------------------------------------------------------------
-    
-    // Main game loop
-    while (!WindowShouldClose())
-    {     
-        // Update
-        DrawFPS(10, 10);
-        game.Update();
+        SetTargetFPS(60);
 
-        // Render
-        BeginDrawing();
-        ClearBackground(Color.RayWhite);
+        Game game = new Game(screenWidth, screenHeight);
 
-        game.Render();
-        
-        EndDrawing();
+        //--------------------------------------------------------------------------------------
+
+        // Main game loop
+        while (!WindowShouldClose())
+        {     
+            // Update
+            DrawFPS(10, 10);
+            game.Update();
+
+            // Render
+            BeginDrawing();
+            ClearBackground(Color.RayWhite);
+
+            game.Render();
+
+            EndDrawing();
+        }
+
+        // De-Initialization
+        //--------------------------------------------------------------------------------------
+
+        CloseWindow();
+
+        //--------------------------------------------------------------------------------------
     }
-
-    // De-Initialization
-    //--------------------------------------------------------------------------------------
-    
-    CloseWindow();
-    
-    //--------------------------------------------------------------------------------------
-    
-    return 0;
 }
