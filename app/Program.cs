@@ -12,16 +12,18 @@ public class Program
         // Initialization
         //--------------------------------------------------------------------------------------
 
-        const int screenWidth = 1792;
-        const int screenHeight = 1024;
+        const int ScreenWidth = 1792;
+        const int ScreenHeight = 1008;
 
-        InitWindow(screenWidth, screenHeight, "Morio Maker");
-        Image windowIcon = LoadImage("assets/morio.png"); 
+        SetTraceLogLevel(TraceLogLevel.Error);
+        InitWindow(ScreenWidth, ScreenHeight, "Morio Maker");
+
+        Image windowIcon = LoadImage("assets/morio.png");
         SetWindowIcon(windowIcon);
- 
+
         SetTargetFPS(60);
 
-        Game game = new Game(screenWidth, screenHeight);
+        Game game = new(ScreenWidth, ScreenHeight);
 
         //--------------------------------------------------------------------------------------
 
