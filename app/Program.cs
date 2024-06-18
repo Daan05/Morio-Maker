@@ -19,7 +19,7 @@ public class Program
         Image windowIcon = LoadImage("assets/morio.png");
         SetWindowIcon(windowIcon);
 
-        SetTargetFPS(60);
+        SetTargetFPS(144);
 
         Game game = new();
 
