@@ -105,7 +105,6 @@ class Game
             {
                 int LineX = i * (int)BlockSize - (int)morio.x % (int)BlockSize;
                 DrawLine(LineX, 0, LineX, ScreenHeight, Color.Black);
-
             }
         }
 

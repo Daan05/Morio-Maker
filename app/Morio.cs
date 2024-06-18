@@ -18,32 +18,56 @@ class Morio
         new(32, 0, 16, 30),
     };
 
-    // these numbers definitely need to be tweaked
-    const int Acc = 500;
-    const int MaxSpeed = 700;
-    const int Resistance = 1000;
-    bool moving = false;
     bool flipped = false; // false is facing to the right
+
+    bool is_grounded = false;
+
+    // these numbers definitely need to be tweaked
+    const float Acc = 80;
+    const float MaxSpeed = 80;
+    const float Resistance = 100;
+    const float JumpVel = 150; // does not get multiplied by frametime
+    const float Gravity = -300;
+
 
     public Morio()
     {
         tex = LoadTexture("assets/morios.png");
-        x = 896;
-        y = ScreenHeight - BlockSize * 3;
+        x = 896f;
+        y = ScreenWidth / 2;
     }
 
     public void Update()
     {
         frameCount++;
 
+        if (y <= BlockSize * 3f)
+        {
+            y = BlockSize * 3f;
+            vel.Y = 0f;
+            is_grounded = true;
+        }
+
+        if (!is_grounded)
+        {
+            vel.Y += Gravity * GetFrameTime();
+        }
+
+        if (IsKeyPressed(KeyboardKey.Space) && is_grounded)
+        {
+            vel.Y = JumpVel;
+            is_grounded = false;
+            // vel.Y -= 10f;
+        }
+
         if (IsKeyDown(KeyboardKey.Right) || IsKeyDown(KeyboardKey.D))
         {
             vel.X += Acc * GetFrameTime();
-            if (flipped && vel.X < -200.0f)
+            if (flipped)
             {
-                if (vel.X < 200.0f)
+                if (vel.X < -20.0f)
                 {
-                    vel.X = -200.0f;
+                    vel.X = -20.0f;
                 }
                 else
                 {
@@ -51,7 +75,6 @@ class Morio
                 }
             }
 
-            moving = true;
             flipped = false;
         }
         else if (IsKeyDown(KeyboardKey.Left) || IsKeyDown(KeyboardKey.A))
@@ -59,9 +82,9 @@ class Morio
             vel.X -= Acc * GetFrameTime();
             if (!flipped)
             {
-                if (vel.X > 200.0f)
+                if (vel.X > 20.0f)
                 {
-                    vel.X = 200.0f;
+                    vel.X = 20.0f;
                 }
                 else
                 {
@@ -69,23 +92,21 @@ class Morio
                 }
             }
 
-            moving = true;
             flipped = true;
         }
         else
         {
-            if (vel.X > 50.0f)
+            if (vel.X > 20.0f)
             {
                 vel.X -= Resistance * GetFrameTime();
             }
-            else if (vel.X < -50.0f)
+            else if (vel.X < -20.0f)
             {
                 vel.X += Resistance * GetFrameTime();
             }
             else
             {
                 vel.X = 0.0f;
-                moving = false;
                 frameCount = 0;
             }
 
@@ -99,8 +120,9 @@ class Morio
             vel.X = -MaxSpeed;
         }
 
-        // System.Console.WriteLine(vel.X);
-        x += vel.X * GetFrameTime();
+        // System.Console.WriteLine(y);
+        x += vel.X * GetFrameTime() * BlockSize * 0.1f; // multiply by block size because speed should be based on blocks, not space on the screen
+        y += vel.Y * GetFrameTime() * BlockSize * 0.1f; // multiply by 0.1 because it makes the constants easier to work with
     }
 
     public void Render()
@@ -108,16 +130,11 @@ class Morio
         // System.Console.WriteLine(x);
         Vector2 origin = new(0.0f, 0.0f);
         Rectangle src;
-        if (moving)
-        {
-            src = animationFrames[((frameCount / 5) % 3)];
-        }
-        else
-        {
-            src = animationFrames[0];
-        }
 
-        Vector2 pos = new(887, y);
+        int newFrameTime = (int)((float)frameCount * GetFrameTime() * 12f);
+        src = animationFrames[newFrameTime % 3];
+
+        Vector2 pos = new(887, ScreenHeight - y);
         Rectangle dest = new(pos, BlockSize, BlockSize * 2);
         if (flipped)
         {
