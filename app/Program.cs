@@ -2,6 +2,7 @@
 using Raylib_cs;
 
 using static Raylib_cs.Raylib;
+using static Constants;
 
 namespace MorioMaker;
 
@@ -12,9 +13,6 @@ public class Program
         // Initialization
         //--------------------------------------------------------------------------------------
 
-        const int ScreenWidth = 1792;
-        const int ScreenHeight = 1008;
-
         SetTraceLogLevel(TraceLogLevel.Error);
         InitWindow(ScreenWidth, ScreenHeight, "Morio Maker");
 
@@ -23,7 +21,7 @@ public class Program
 
         SetTargetFPS(60);
 
-        Game game = new(ScreenWidth, ScreenHeight);
+        Game game = new();
 
         //--------------------------------------------------------------------------------------
 

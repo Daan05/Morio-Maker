@@ -2,13 +2,10 @@ using System.Globalization;
 using System.Numerics;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
+using static Constants;
 
 class Game
 {
-    int ScreenWidth;
-    int ScreenHeight;
-
-    const float BlockSize = 112.0f;
     int GridSizeX;
     int GridSizeY;
 
@@ -30,11 +27,8 @@ class Game
         new(34.0f, 34.0f, 16.0f, 16.0f),
     };
 
-    public Game(int _screenWidth, int _screenHeight)
+    public Game()
     {
-        ScreenWidth = _screenWidth;
-        ScreenHeight = _screenHeight;
-
         GridSizeX = (int)((float)ScreenWidth / BlockSize); //16
         GridSizeY = (int)((float)ScreenHeight / BlockSize); //10
 
@@ -42,7 +36,6 @@ class Game
         {
             System.Console.WriteLine("WARNING: screensize doesn't match blocksize");
         }
-
         // System.Console.WriteLine(ScreenHeight + " / " + BlockSize + " = " + GridSizeY);
 
         MapWidth = (int)(GridSizeX * BlockSize);
@@ -64,19 +57,6 @@ class Game
             }
 
         }
-        // Map
-        // TileType[,] _tiles = {
-        //     { TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, },
-        //     { TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, },
-        //     { TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, },
-        //     { TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, },
-        //     { TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, },
-        //     { TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, },
-        //     { TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, },
-        //     { TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, TileType.Empty, },
-        //     { TileType.Empty, TileType.Empty, TileType.Grass_TL, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TM, TileType.Grass_TR, TileType.Empty, TileType.Empty, },
-        //     { TileType.Empty, TileType.Empty, TileType.Grass_ML, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MM, TileType.Grass_MR, TileType.Empty, TileType.Empty, },
-        // };
 
         tiles = _tiles;
         morio = new Morio();
@@ -110,9 +90,6 @@ class Game
             }
         }
         morio.Render();
-
-        DrawLine(0 - (int)morio.x, 0, 0 - (int)morio.x, 1024, Color.Red);
-        DrawLine(34 * (int)BlockSize - (int)morio.x, 0, 34 * (int)BlockSize - (int)morio.x + 5, 1024, Color.Red);
 
         // Draw gridlines for debugging purposes, do not remove
         if (true)
