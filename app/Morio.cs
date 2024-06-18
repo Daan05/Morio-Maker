@@ -34,7 +34,7 @@ class Morio
 
     public void Update()
     {
-        frameCount++; 
+        frameCount++;
 
         if (IsKeyDown(KeyboardKey.Right) || IsKeyDown(KeyboardKey.D))
         {

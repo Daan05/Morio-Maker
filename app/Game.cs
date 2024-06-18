@@ -103,7 +103,7 @@ class Game
             }
             for (int i = 0; i < GridSizeX * 4; i++)
             {
-                int LineX = (int)((float)((i - GridSizeX * 2) * BlockSize) - morio.x);
+                int LineX = i * (int)BlockSize - (int)morio.x % (int)BlockSize;
                 DrawLine(LineX, 0, LineX, ScreenHeight, Color.Black);
 
             }
