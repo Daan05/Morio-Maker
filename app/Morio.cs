@@ -22,13 +22,14 @@ class Morio
 
     bool is_grounded = false;
 
-    // these numbers definitely need to be tweaked
+    // horizontal movement
     const float Acc = 80;
     const float MaxSpeed = 80;
-    const float Resistance = 0.98f;
+    const float Resistance = 0.97f;
+    const float MinSpeed = 20;
 
-    // jumping
-    const float JumpVel = 180; 
+    // vertical movement
+    const float JumpVel = 180;
     const float GravMultIfJumpHeld = 0.5f;
     const float Gravity = -700;
 
@@ -42,8 +43,8 @@ class Morio
 
     public void Update()
     {
-        bool j = false;
         frameCount++;
+        float grav_mult = 1;
 
         if (y <= BlockSize * 3f)
         {
@@ -54,65 +55,33 @@ class Morio
 
         if (IsKeyDown(KeyboardKey.Space))
         {
-            if (is_grounded) {
+            if (is_grounded)
+            {
                 vel.Y = JumpVel;
-                            is_grounded = false;
-            } else {
-                j = true;
-            }            
+                is_grounded = false;
+            }
+            else if (vel.Y >= 0)
+            {
+                grav_mult = GravMultIfJumpHeld;
+            }
         }
 
         if (!is_grounded)
         {
-            if (j && vel.Y >= 0f) {
-                vel.Y += Gravity * GravMultIfJumpHeld * GetFrameTime();
-
-            } else { vel.Y += Gravity * GetFrameTime();}
+            vel.Y += Gravity * grav_mult * GetFrameTime();
         }
 
         if (IsKeyDown(KeyboardKey.Right) || IsKeyDown(KeyboardKey.D))
         {
-            vel.X += Acc * GetFrameTime();
-            if (flipped)
-            {
-                if (vel.X < -20.0f)
-                {
-                    vel.X = -20.0f;
-                }
-                else
-                {
-                    vel.X = 0.0f;
-                    frameCount = 0;
-                }
-            }
-
-            flipped = false;
+            HandleHorMovement(true);
         }
         else if (IsKeyDown(KeyboardKey.Left) || IsKeyDown(KeyboardKey.A))
         {
-            vel.X -= Acc * GetFrameTime();
-            if (!flipped)
-            {
-                if (vel.X > 20.0f)
-                {
-                    vel.X = 20.0f;
-                }
-                else
-                {
-                    vel.X = 0.0f;
-                    frameCount = 0;
-                }
-            }
-
-            flipped = true;
+            HandleHorMovement(false);
         }
         else
         {
-            if (vel.X > 20.0f)
-            {
-                vel.X *= Resistance;
-            }
-            else if (vel.X < -20.0f)
+            if (vel.X < -MinSpeed || vel.X > MinSpeed)
             {
                 vel.X *= Resistance;
             }
@@ -121,7 +90,6 @@ class Morio
                 vel.X = 0.0f;
                 frameCount = 0;
             }
-
         }
         if (vel.X > MaxSpeed)
         {
@@ -155,5 +123,34 @@ class Morio
         }
 
         DrawTexturePro(tex, src, dest, origin, 0.0f, Color.RayWhite);
+    }
+
+    void HandleHorMovement(bool to_the_right)
+    {
+        float acc = Acc;
+        if (!to_the_right)
+        {
+            acc = -Acc;
+        }
+
+        vel.X += acc * GetFrameTime();
+        if (flipped && to_the_right || !flipped && !to_the_right)
+        {
+            if (to_the_right && vel.X < -MinSpeed)
+            {
+                vel.X = -MinSpeed;
+            }
+            else if (!to_the_right && vel.X > MinSpeed)
+            {
+                vel.X = MinSpeed;
+            }
+            else
+            {
+                vel.X = 0.0f;
+                frameCount = 0;
+            }
+        }
+
+        flipped = !to_the_right;
     }
 }
