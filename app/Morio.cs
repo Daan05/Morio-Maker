@@ -25,20 +25,24 @@ class Morio
     // these numbers definitely need to be tweaked
     const float Acc = 80;
     const float MaxSpeed = 80;
-    const float Resistance = 100;
-    const float JumpVel = 150; // does not get multiplied by frametime
-    const float Gravity = -300;
+    const float Resistance = 0.98f;
+
+    // jumping
+    const float JumpVel = 180; 
+    const float GravMultIfJumpHeld = 0.5f;
+    const float Gravity = -700;
 
 
     public Morio()
     {
         tex = LoadTexture("assets/morios.png");
-        x = 896f;
-        y = ScreenWidth / 2;
+        x = ScreenWidth / 2;
+        y = ScreenHeight / 2;
     }
 
     public void Update()
     {
+        bool j = false;
         frameCount++;
 
         if (y <= BlockSize * 3f)
@@ -48,16 +52,22 @@ class Morio
             is_grounded = true;
         }
 
-        if (!is_grounded)
+        if (IsKeyDown(KeyboardKey.Space))
         {
-            vel.Y += Gravity * GetFrameTime();
+            if (is_grounded) {
+                vel.Y = JumpVel;
+                            is_grounded = false;
+            } else {
+                j = true;
+            }            
         }
 
-        if (IsKeyPressed(KeyboardKey.Space) && is_grounded)
+        if (!is_grounded)
         {
-            vel.Y = JumpVel;
-            is_grounded = false;
-            // vel.Y -= 10f;
+            if (j && vel.Y >= 0f) {
+                vel.Y += Gravity * GravMultIfJumpHeld * GetFrameTime();
+
+            } else { vel.Y += Gravity * GetFrameTime();}
         }
 
         if (IsKeyDown(KeyboardKey.Right) || IsKeyDown(KeyboardKey.D))
@@ -72,6 +82,7 @@ class Morio
                 else
                 {
                     vel.X = 0.0f;
+                    frameCount = 0;
                 }
             }
 
@@ -89,6 +100,7 @@ class Morio
                 else
                 {
                     vel.X = 0.0f;
+                    frameCount = 0;
                 }
             }
 
@@ -98,11 +110,11 @@ class Morio
         {
             if (vel.X > 20.0f)
             {
-                vel.X -= Resistance * GetFrameTime();
+                vel.X *= Resistance;
             }
             else if (vel.X < -20.0f)
             {
-                vel.X += Resistance * GetFrameTime();
+                vel.X *= Resistance;
             }
             else
             {
@@ -133,8 +145,9 @@ class Morio
 
         int newFrameTime = (int)((float)frameCount * GetFrameTime() * 12f);
         src = animationFrames[newFrameTime % 3];
+        // System.Console.WriteLine(newFrameTime);
 
-        Vector2 pos = new(887, ScreenHeight - y);
+        Vector2 pos = new(ScreenWidth * 0.5f, ScreenHeight - y);
         Rectangle dest = new(pos, BlockSize, BlockSize * 2);
         if (flipped)
         {
@@ -142,9 +155,5 @@ class Morio
         }
 
         DrawTexturePro(tex, src, dest, origin, 0.0f, Color.RayWhite);
-        // ((frameCount / 10) % 3) + 4
-        // framecount / 10 = every animation tick on screen for 1/6th second (at 60 fps)
-        // % 3 = there are 3 images that are part of the walking animation
-        // + 4 = start at index 4 (so index 4, 5, 6 are for walking)
     }
 }

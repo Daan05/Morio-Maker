@@ -1,6 +1,8 @@
 public static class Constants
 {
-    public static int ScreenWidth = 1792;
-    public static int ScreenHeight = 1008;
-    public static float BlockSize = 84f; // used to be 112f, feel free to change back
+    // useful because it makes resizing the window possible without manually adjusting the block size
+    static float const_mult = 0.5f;
+    public static int ScreenWidth = (int)(1792 * const_mult);
+    public static int ScreenHeight = (int)(1008 * const_mult);
+    public static float BlockSize = (int)(84 * const_mult); 
 }

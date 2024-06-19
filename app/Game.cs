@@ -81,7 +81,6 @@ class Game
                     continue;
                 }
 
-                // why (j -0.2f) instead of just j?
                 Vector2 pos = new(i * BlockSize - morio.x, j * BlockSize);
                 Rectangle src = blockTextureSourceRects[tiles[j, i].GetHashCode()];
                 Rectangle dest = new(pos, BlockSize, BlockSize);
@@ -89,6 +88,7 @@ class Game
                 DrawTexturePro(blocksTex, src, dest, origin, 0.0f, Color.RayWhite);
             }
         }
+
         morio.Render();
 
         // Draw gridlines for debugging purposes, do not remove
@@ -101,7 +101,7 @@ class Game
                 DrawLine(0, LineY, ScreenWidth, LineY, Color.Black);
 
             }
-            for (int i = 0; i < GridSizeX * 4; i++)
+            for (int i = 0; i < GridSizeX + 2; i++)
             {
                 int LineX = i * (int)BlockSize - (int)morio.x % (int)BlockSize;
                 DrawLine(LineX, 0, LineX, ScreenHeight, Color.Black);
