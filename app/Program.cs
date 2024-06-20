@@ -12,18 +12,18 @@ public class Program
     {
         // Initialization
         //--------------------------------------------------------------------------------------
+        // FindSuitableBlockSize();
 
         SetTraceLogLevel(TraceLogLevel.Error);
-        InitWindow(ScreenWidth, ScreenHeight, "Morio Maker");
+        InitWindow(WindowWidth, WindowHeight, "Morio Maker");
 
         Image windowIcon = LoadImage("assets/morio.png");
         SetWindowIcon(windowIcon);
 
         SetTargetFPS(144);
+        // SetWindowState(ConfigFlags.VSyncHint);
 
         Game game = new();
-
-        //--------------------------------------------------------------------------------------
 
         // Main game loop
         while (!WindowShouldClose())
@@ -42,8 +42,20 @@ public class Program
         }
 
         // De-Initialization
-        //--------------------------------------------------------------------------------------
-
         CloseWindow();
     }
+
+    // Useful for finding block size that match the window size
+    // static void FindSuitableBlockSize()
+    // {
+    //     for (int i = 1; i < WindowWidth / 8; i++)
+    //     {
+    //         if ((float)WindowWidth / (float)i % 1 == 0 && (float)WindowHeight / (float)i % 1 == 0)
+    //         {
+    //             Console.WriteLine(i + " gives " + (float)WindowWidth / (float)i);
+
+    //         }
+    //     }
+    // }
 }
+

@@ -37,8 +37,8 @@ class Morio
     public Morio()
     {
         tex = LoadTexture("assets/morios.png");
-        x = ScreenWidth / 2;
-        y = ScreenHeight / 2;
+        x = WindowWidth / 2;
+        y = WindowHeight / 2;
     }
 
     public void Update()
@@ -46,9 +46,9 @@ class Morio
         frameCount++;
         float grav_mult = 1;
 
-        if (y <= BlockSize * 3f)
+        if (y <= BlockSize * 4f)
         {
-            y = BlockSize * 3f;
+            y = BlockSize * 4f;
             vel.Y = 0f;
             is_grounded = true;
         }
@@ -100,22 +100,22 @@ class Morio
             vel.X = -MaxSpeed;
         }
 
-        // System.Console.WriteLine(y);
+        // Console.WriteLine(y);
         x += vel.X * GetFrameTime() * BlockSize * 0.1f; // multiply by block size because speed should be based on blocks, not space on the screen
         y += vel.Y * GetFrameTime() * BlockSize * 0.1f; // multiply by 0.1 because it makes the constants easier to work with
     }
 
     public void Render()
     {
-        // System.Console.WriteLine(x);
+        // Console.WriteLine(x);
         Vector2 origin = new(0.0f, 0.0f);
         Rectangle src;
 
         int newFrameTime = (int)((float)frameCount * GetFrameTime() * 12f);
         src = animationFrames[newFrameTime % 3];
-        // System.Console.WriteLine(newFrameTime);
+        // Console.WriteLine(newFrameTime);
 
-        Vector2 pos = new(ScreenWidth * 0.5f, ScreenHeight - y);
+        Vector2 pos = new(WindowWidth * 0.5f, WindowHeight - y);
         Rectangle dest = new(pos, BlockSize, BlockSize * 2);
         if (flipped)
         {
