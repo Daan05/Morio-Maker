@@ -35,7 +35,6 @@ public class Program
             ClearBackground(Color.RayWhite);
 
             game.Render();
-            DrawFPS(10, 10);
 
             EndDrawing();
         }

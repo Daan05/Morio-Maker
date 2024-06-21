@@ -12,9 +12,9 @@ class Morio
     Vector2 vel = new(0f, 0f);
     uint frameCount = 0;
     readonly Rectangle[] animationFrames = {
-        new(0, 0, 16, 30),
-        new(16, 0, 16, 30),
-        new(32, 0, 16, 30),
+        new(0, 2, 15, 28),
+        new(16, 2, 15, 28),
+        new(32, 2, 15, 28),
     };
 
     bool flipped = false; // false is facing to the right

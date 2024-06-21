@@ -8,6 +8,8 @@ class Game
     readonly int GridSizeX;
     readonly int GridSizeY;
 
+    bool debugModeEnabled = true;
+
     readonly TileType[,] tiles;
     readonly Morio morio = new();
 
@@ -48,11 +50,22 @@ class Game
 
     public void Update()
     {
+        if (IsKeyPressed(KeyboardKey.E))
+            debugModeEnabled = !debugModeEnabled;
+            
         morio.Update();
     }
 
     public void Render()
     {
+        if (!debugModeEnabled)
+        {
+            Texture2D background = LoadTexture("assets/back.png");
+            Rectangle src = new(0, 0, background.Width, background.Height);
+            Rectangle dest = new(0, 0, WindowWidth, WindowHeight);
+            DrawTexturePro(background, src, dest, new(0, 0), 0, Color.RayWhite);
+        }
+
         Vector2 origin = new(0.0f, 0.0f);
         for (int j = 0; j < tiles.GetLength(0); j++)
         {
@@ -74,8 +87,10 @@ class Game
         morio.Render();
 
         // Draw gridlines for debugging purposes, do not remove
-        if (RenderDebugStuff)
+        if (debugModeEnabled)
         {
+            DrawFPS(10, 10);
+
             for (int i = 0; i < GridSizeY; i++)
             {
                 int LineY = i * (int)BlockSize;

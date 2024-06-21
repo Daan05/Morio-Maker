@@ -9,11 +9,9 @@ namespace Constants_name
         // useful because it makes resizing the window possible without manually adjusting the block size, default = 1f
         const float constMult = 0.8f;
 
-        public const int WindowWidth = (int)(1800 * constMult);
+        public const int WindowWidth = (int)(1530 * constMult);
         public const int WindowHeight = (int)(1020 * constMult);
         public const float BlockSize = (int)(60 * constMult);
-
-        public const bool RenderDebugStuff = true;
 
         static Vector2 texSize = new(16f, 16f);
         public static readonly Rectangle[] blockTexSourceRects = {
