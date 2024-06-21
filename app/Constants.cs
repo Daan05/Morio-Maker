@@ -1,11 +1,31 @@
-public static class Constants
+using System.Numerics;
+using Raylib_cs;
+
+// not sure why namespace is needed here, but removing it gives warning
+namespace Constants_name
 {
-    // useful because it makes resizing the window possible without manually adjusting the block size, default = 1f
-    static float const_mult = 0.8f;
+    public static class Constants
+    {
+        // useful because it makes resizing the window possible without manually adjusting the block size, default = 1f
+        const float constMult = 0.8f;
 
-    public static int WindowWidth = (int)(1800 * const_mult);
-    public static int WindowHeight = (int)(1020 * const_mult);
-    public static float BlockSize = (int)(60 * const_mult);
+        public const int WindowWidth = (int)(1800 * constMult);
+        public const int WindowHeight = (int)(1020 * constMult);
+        public const float BlockSize = (int)(60 * constMult);
 
-    public static bool RenderDebugStuff = true;
+        public const bool RenderDebugStuff = true;
+
+        static Vector2 texSize = new(16f, 16f);
+        public static readonly Rectangle[] blockTexSourceRects = {
+            new(0f, 0f, texSize),
+            new(17f, 0f, texSize),
+            new(34f, 0f, texSize),
+            new(0f, 17f, texSize),
+            new(17f, 17f, texSize),
+            new(34f, 17f, texSize),
+            new(0f, 34f, texSize),
+            new(17f, 34f, texSize),
+            new(34f, 34f, texSize),
+        };
+    }
 }

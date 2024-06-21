@@ -2,7 +2,7 @@ using System.Numerics;
 using Raylib_cs;
 
 using static Raylib_cs.Raylib;
-using static Constants;
+using static Constants_name.Constants;
 
 class Morio
 {
@@ -10,7 +10,6 @@ class Morio
     public float x;
     public float y;
     Vector2 vel = new(0f, 0f);
-
     uint frameCount = 0;
     readonly Rectangle[] animationFrames = {
         new(0, 0, 16, 30),
@@ -28,7 +27,7 @@ class Morio
     const float MaxWalkSpeed = 80;
     const float MaxSprintSpeed = 120;
 
-    const float Resistance = 0.98f;
+    const float Resistance = 0.975f;
     const float MinSpeed = 20;
 
     // vertical movement
@@ -88,37 +87,28 @@ class Morio
             horKeyPressed = true;
         }
 
-        // float maxSpeed = MaxSprintSpeed;
-        // if (!shiftHeld && !slowingDown)
-        // {
-        //     maxSpeed = MaxWalkSpeed;
-        // }
-
-        if (vel.X > MaxWalkSpeed && !sprinting)
+        float maxSpeed = MaxWalkSpeed;
+        if (sprinting)
         {
-            vel.X = MaxWalkSpeed;
-        }
-        else if (vel.X < -MaxWalkSpeed && !sprinting)
-        {
-            vel.X = -MaxWalkSpeed;
+            maxSpeed = MaxSprintSpeed;
         }
 
-        if (vel.X > MaxSprintSpeed)
+        if (vel.X > maxSpeed)
         {
-            vel.X = MaxSprintSpeed;
+            vel.X = maxSpeed;
         }
-        else if (vel.X < -MaxSprintSpeed)
+        else if (vel.X < -maxSpeed)
         {
-            vel.X = -MaxSprintSpeed;
+            vel.X = -maxSpeed;
         }
 
         if (!horKeyPressed || !shiftHeld && sprinting)
         {
             if (Math.Abs(vel.X) < MinSpeed && !horKeyPressed)
             {
+                // speed below the desired minimal speed, so make speed 0
                 vel.X = 0;
                 frameCount = 0;
-
             }
             else
             {
@@ -162,17 +152,16 @@ class Morio
     void HandleHorMovement(bool to_the_right, bool shiftHeld)
     {
         float acc = Acc;
-        if (!to_the_right)
+        if (to_the_right)
         {
-            acc = -Acc;
+            vel.X += acc * GetFrameTime();
         }
-        if (shiftHeld)
+        else
         {
-            acc *= 2;
+            vel.X -= acc * GetFrameTime();
         }
 
-        vel.X += acc * GetFrameTime();
-        if (flipped == to_the_right)
+        if (flipped == to_the_right) // mario is turning, so decrease his speed so the turn is smoother
         {
             if (to_the_right && vel.X < -MinSpeed)
             {
@@ -181,11 +170,6 @@ class Morio
             else if (!to_the_right && vel.X > MinSpeed)
             {
                 vel.X = MinSpeed;
-            }
-            else
-            {
-                vel.X = 0.0f;
-                frameCount = 0;
             }
         }
 

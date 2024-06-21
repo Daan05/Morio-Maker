@@ -1,22 +1,5 @@
-using System.Numerics;
-using Raylib_cs;
-
 class Tile
 {
-    static Vector2 texSize = new(16f, 16f);
-
-    public static Rectangle[] blockTexSourceRects = {
-        new(0.0f, 0.0f, texSize),
-        new(17.0f, 0.0f, texSize),
-        new(34.0f, 0.0f, texSize),
-        new(0.0f, 17.0f, texSize),
-        new(17.0f, 17.0f, texSize),
-        new(34.0f, 17.0f, texSize),
-        new(0.0f, 34.0f, texSize),
-        new(17.0f, 34.0f, texSize),
-        new(34.0f, 34.0f, texSize),
-    };
-
     public TileType type = TileType.Empty;
 
     public Tile(TileType _type)

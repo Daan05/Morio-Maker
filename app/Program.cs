@@ -2,7 +2,7 @@
 using Raylib_cs;
 
 using static Raylib_cs.Raylib;
-using static Constants;
+using static Constants_name.Constants;
 
 namespace MorioMaker;
 

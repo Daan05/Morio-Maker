@@ -2,35 +2,27 @@ using System.Globalization;
 using System.Numerics;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
-using static Constants;
-using System.Net.Mail;
-
+using static Constants_name.Constants;
 class Game
 {
-    int GridSizeX;
-    int GridSizeY;
+    readonly int GridSizeX;
+    readonly int GridSizeY;
 
-    int MapWidth;
-    int MapHeight;
+    readonly TileType[,] tiles;
+    readonly Morio morio = new();
 
-    TileType[,] tiles;
-    Morio morio;
-    Texture2D blocksTex;
+    Texture2D blocksTex = LoadTexture("assets/tiles.png");
 
     public Game()
     {
-        GridSizeX = (int)((float)WindowWidth / BlockSize);
-        GridSizeY = (int)((float)WindowHeight / BlockSize);
+        GridSizeX = (int)(WindowWidth / BlockSize);
+        GridSizeY = (int)(WindowHeight / BlockSize);
 
-        if ((float)WindowHeight % BlockSize != 0 || (float)WindowWidth % BlockSize != 0)
+        if (WindowHeight % BlockSize != 0 || WindowWidth % BlockSize != 0)
         {
-            Console.WriteLine("WARNING: screensize doesn't match blocksize");
+            // line gives warning, but if you change the constant the warning goes away, so the warning is usefulA
+            Console.WriteLine("WARNING: screensize doesn't match blocksize"); 
         }
-        // Console.WriteLine(ScreenHeight + " / " + BlockSize + " = " + GridSizeY);
-
-        MapWidth = (int)(GridSizeX * BlockSize);
-        MapHeight = (int)(GridSizeY * BlockSize);
-        // Console.WriteLine(MapHeight);
 
         TileType[,] _tiles = new TileType[GridSizeY, GridSizeX * 3];
 
@@ -52,9 +44,6 @@ class Game
         }
 
         tiles = _tiles;
-        morio = new Morio();
-        blocksTex = LoadTexture("assets/tiles.png");
-
     }
 
     public void Update()
@@ -75,7 +64,7 @@ class Game
                 }
 
                 Vector2 pos = new(i * BlockSize - morio.x, j * BlockSize);
-                Rectangle src = Tile.blockTexSourceRects[tiles[j, i].GetHashCode()];
+                Rectangle src = blockTexSourceRects[tiles[j, i].GetHashCode()];
                 Rectangle dest = new(pos, BlockSize + 1f, BlockSize);
 
                 DrawTexturePro(blocksTex, src, dest, origin, 0.0f, Color.RayWhite);
