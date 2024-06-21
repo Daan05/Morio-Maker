@@ -3,6 +3,7 @@ using System.Numerics;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
 using static Constants;
+using System.Net.Mail;
 
 class Game
 {
@@ -18,8 +19,8 @@ class Game
 
     public Game()
     {
-        GridSizeX = (int)((float)WindowWidth / BlockSize); 
-        GridSizeY = (int)((float)WindowHeight / BlockSize); 
+        GridSizeX = (int)((float)WindowWidth / BlockSize);
+        GridSizeY = (int)((float)WindowHeight / BlockSize);
 
         if ((float)WindowHeight % BlockSize != 0 || (float)WindowWidth % BlockSize != 0)
         {
@@ -84,7 +85,7 @@ class Game
         morio.Render();
 
         // Draw gridlines for debugging purposes, do not remove
-        if (DrawDebugLines)
+        if (RenderDebugStuff)
         {
             for (int i = 0; i < GridSizeY; i++)
             {
@@ -98,7 +99,8 @@ class Game
                 int LineX = i * (int)BlockSize - (int)morio.x % (int)BlockSize;
                 DrawLine(LineX, 0, LineX, WindowHeight, Color.Black);
             }
-        }
 
+            morio.RenderDebugInfo();
+        }
     }
 }

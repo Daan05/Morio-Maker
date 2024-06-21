@@ -3,7 +3,7 @@ using Raylib_cs;
 
 class Tile
 {
-    static Vector2 texSize = new(16f, 16f); 
+    static Vector2 texSize = new(16f, 16f);
 
     public static Rectangle[] blockTexSourceRects = {
         new(0.0f, 0.0f, texSize),

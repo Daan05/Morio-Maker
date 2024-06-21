@@ -7,5 +7,5 @@ public static class Constants
     public static int WindowHeight = (int)(1020 * const_mult);
     public static float BlockSize = (int)(60 * const_mult);
 
-    public static bool DrawDebugLines = false;
+    public static bool RenderDebugStuff = true;
 }

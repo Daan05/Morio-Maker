@@ -21,11 +21,14 @@ class Morio
     bool flipped = false; // false is facing to the right
 
     bool is_grounded = false;
+    bool sprinting = false; // false means he's walking, doesn't matter if he's in the air or not
 
     // horizontal movement
     const float Acc = 80;
-    const float MaxSpeed = 80;
-    const float Resistance = 0.97f;
+    const float MaxWalkSpeed = 80;
+    const float MaxSprintSpeed = 120;
+
+    const float Resistance = 0.98f;
     const float MinSpeed = 20;
 
     // vertical movement
@@ -71,33 +74,56 @@ class Morio
             vel.Y += Gravity * grav_mult * GetFrameTime();
         }
 
+        bool shiftHeld = IsKeyDown(KeyboardKey.LeftShift) || IsKeyDown(KeyboardKey.RightShift);
+        bool horKeyPressed = false;
+
         if (IsKeyDown(KeyboardKey.Right) || IsKeyDown(KeyboardKey.D))
         {
-            HandleHorMovement(true);
+            HandleHorMovement(true, shiftHeld);
+            horKeyPressed = true;
         }
         else if (IsKeyDown(KeyboardKey.Left) || IsKeyDown(KeyboardKey.A))
         {
-            HandleHorMovement(false);
+            HandleHorMovement(false, shiftHeld);
+            horKeyPressed = true;
         }
-        else
+
+        // float maxSpeed = MaxSprintSpeed;
+        // if (!shiftHeld && !slowingDown)
+        // {
+        //     maxSpeed = MaxWalkSpeed;
+        // }
+
+        if (vel.X > MaxWalkSpeed && !sprinting)
         {
-            if (vel.X < -MinSpeed || vel.X > MinSpeed)
+            vel.X = MaxWalkSpeed;
+        }
+        else if (vel.X < -MaxWalkSpeed && !sprinting)
+        {
+            vel.X = -MaxWalkSpeed;
+        }
+
+        if (vel.X > MaxSprintSpeed)
+        {
+            vel.X = MaxSprintSpeed;
+        }
+        else if (vel.X < -MaxSprintSpeed)
+        {
+            vel.X = -MaxSprintSpeed;
+        }
+
+        if (!horKeyPressed || !shiftHeld && sprinting)
+        {
+            if (Math.Abs(vel.X) < MinSpeed && !horKeyPressed)
             {
-                vel.X *= Resistance;
+                vel.X = 0;
+                frameCount = 0;
+
             }
             else
             {
-                vel.X = 0.0f;
-                frameCount = 0;
+                vel.X *= Resistance;
             }
-        }
-        if (vel.X > MaxSpeed)
-        {
-            vel.X = MaxSpeed;
-        }
-        else if (vel.X < -MaxSpeed)
-        {
-            vel.X = -MaxSpeed;
         }
 
         // Console.WriteLine(y);
@@ -125,16 +151,28 @@ class Morio
         DrawTexturePro(tex, src, dest, origin, 0.0f, Color.RayWhite);
     }
 
-    void HandleHorMovement(bool to_the_right)
+    public void RenderDebugInfo()
+    {
+        string posText = string.Format("pos: {0} {1}", (int)x, (int)y);
+        DrawText(posText, 10, 35, 20, Color.Red);
+        string velText = string.Format("vel:  {0} {1}", (int)vel.X, (int)vel.Y);
+        DrawText(velText, 10, 55, 20, Color.Red);
+    }
+
+    void HandleHorMovement(bool to_the_right, bool shiftHeld)
     {
         float acc = Acc;
         if (!to_the_right)
         {
             acc = -Acc;
         }
+        if (shiftHeld)
+        {
+            acc *= 2;
+        }
 
         vel.X += acc * GetFrameTime();
-        if (flipped && to_the_right || !flipped && !to_the_right)
+        if (flipped == to_the_right)
         {
             if (to_the_right && vel.X < -MinSpeed)
             {
@@ -149,6 +187,15 @@ class Morio
                 vel.X = 0.0f;
                 frameCount = 0;
             }
+        }
+
+        if (shiftHeld && Math.Abs(vel.X) > MaxWalkSpeed)
+        {
+            sprinting = true;
+        }
+        if (Math.Abs(vel.X) < MaxWalkSpeed)
+        {
+            sprinting = false;
         }
 
         flipped = !to_the_right;
