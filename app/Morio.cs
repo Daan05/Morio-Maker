@@ -2,7 +2,7 @@ using System.Numerics;
 using Raylib_cs;
 
 using static Raylib_cs.Raylib;
-using static Constants;
+using static Constants_name.Constants;
 
 class Morio
 {
@@ -10,22 +10,24 @@ class Morio
     public float x;
     public float y;
     Vector2 vel = new(0f, 0f);
-
     uint frameCount = 0;
     readonly Rectangle[] animationFrames = {
-        new(0, 0, 16, 30),
-        new(16, 0, 16, 30),
-        new(32, 0, 16, 30),
+        new(0, 2, 15, 28),
+        new(16, 2, 15, 28),
+        new(32, 2, 15, 28),
     };
 
     bool flipped = false; // false is facing to the right
 
     bool is_grounded = false;
+    bool sprinting = false; // false means he's walking, doesn't matter if he's in the air or not
 
     // horizontal movement
     const float Acc = 80;
-    const float MaxSpeed = 80;
-    const float Resistance = 0.97f;
+    const float MaxWalkSpeed = 80;
+    const float MaxSprintSpeed = 120;
+
+    const float Resistance = 0.975f;
     const float MinSpeed = 20;
 
     // vertical movement
@@ -37,8 +39,8 @@ class Morio
     public Morio()
     {
         tex = LoadTexture("assets/morios.png");
-        x = ScreenWidth / 2;
-        y = ScreenHeight / 2;
+        x = WindowWidth / 2;
+        y = WindowHeight / 2;
     }
 
     public void Update()
@@ -46,9 +48,9 @@ class Morio
         frameCount++;
         float grav_mult = 1;
 
-        if (y <= BlockSize * 3f)
+        if (y <= BlockSize * 4f)
         {
-            y = BlockSize * 3f;
+            y = BlockSize * 4f;
             vel.Y = 0f;
             is_grounded = true;
         }
@@ -71,51 +73,65 @@ class Morio
             vel.Y += Gravity * grav_mult * GetFrameTime();
         }
 
+        bool shiftHeld = IsKeyDown(KeyboardKey.LeftShift) || IsKeyDown(KeyboardKey.RightShift);
+        bool horKeyPressed = false;
+
         if (IsKeyDown(KeyboardKey.Right) || IsKeyDown(KeyboardKey.D))
         {
-            HandleHorMovement(true);
+            HandleHorMovement(true, shiftHeld);
+            horKeyPressed = true;
         }
         else if (IsKeyDown(KeyboardKey.Left) || IsKeyDown(KeyboardKey.A))
         {
-            HandleHorMovement(false);
+            HandleHorMovement(false, shiftHeld);
+            horKeyPressed = true;
         }
-        else
+
+        float maxSpeed = MaxWalkSpeed;
+        if (sprinting)
         {
-            if (vel.X < -MinSpeed || vel.X > MinSpeed)
+            maxSpeed = MaxSprintSpeed;
+        }
+
+        if (vel.X > maxSpeed)
+        {
+            vel.X = maxSpeed;
+        }
+        else if (vel.X < -maxSpeed)
+        {
+            vel.X = -maxSpeed;
+        }
+
+        if (!horKeyPressed || !shiftHeld && sprinting)
+        {
+            if (Math.Abs(vel.X) < MinSpeed && !horKeyPressed)
             {
-                vel.X *= Resistance;
+                // speed below the desired minimal speed, so make speed 0
+                vel.X = 0;
+                frameCount = 0;
             }
             else
             {
-                vel.X = 0.0f;
-                frameCount = 0;
+                vel.X *= Resistance;
             }
         }
-        if (vel.X > MaxSpeed)
-        {
-            vel.X = MaxSpeed;
-        }
-        else if (vel.X < -MaxSpeed)
-        {
-            vel.X = -MaxSpeed;
-        }
 
-        // System.Console.WriteLine(y);
+        // Console.WriteLine(y);
         x += vel.X * GetFrameTime() * BlockSize * 0.1f; // multiply by block size because speed should be based on blocks, not space on the screen
         y += vel.Y * GetFrameTime() * BlockSize * 0.1f; // multiply by 0.1 because it makes the constants easier to work with
     }
 
     public void Render()
     {
-        // System.Console.WriteLine(x);
+        // Console.WriteLine(x);
         Vector2 origin = new(0.0f, 0.0f);
         Rectangle src;
 
         int newFrameTime = (int)((float)frameCount * GetFrameTime() * 12f);
         src = animationFrames[newFrameTime % 3];
-        // System.Console.WriteLine(newFrameTime);
+        // Console.WriteLine(newFrameTime);
 
-        Vector2 pos = new(ScreenWidth * 0.5f, ScreenHeight - y);
+        Vector2 pos = new(WindowWidth * 0.5f, WindowHeight - y);
         Rectangle dest = new(pos, BlockSize, BlockSize * 2);
         if (flipped)
         {
@@ -125,16 +141,27 @@ class Morio
         DrawTexturePro(tex, src, dest, origin, 0.0f, Color.RayWhite);
     }
 
-    void HandleHorMovement(bool to_the_right)
+    public void RenderDebugInfo()
+    {
+        string posText = string.Format("pos: {0} {1}", (int)x, (int)y);
+        DrawText(posText, 10, 35, 20, Color.Red);
+        string velText = string.Format("vel:  {0} {1}", (int)vel.X, (int)vel.Y);
+        DrawText(velText, 10, 55, 20, Color.Red);
+    }
+
+    void HandleHorMovement(bool to_the_right, bool shiftHeld)
     {
         float acc = Acc;
-        if (!to_the_right)
+        if (to_the_right)
         {
-            acc = -Acc;
+            vel.X += acc * GetFrameTime();
+        }
+        else
+        {
+            vel.X -= acc * GetFrameTime();
         }
 
-        vel.X += acc * GetFrameTime();
-        if (flipped && to_the_right || !flipped && !to_the_right)
+        if (flipped == to_the_right) // mario is turning, so decrease his speed so the turn is smoother
         {
             if (to_the_right && vel.X < -MinSpeed)
             {
@@ -144,11 +171,15 @@ class Morio
             {
                 vel.X = MinSpeed;
             }
-            else
-            {
-                vel.X = 0.0f;
-                frameCount = 0;
-            }
+        }
+
+        if (shiftHeld && Math.Abs(vel.X) > MaxWalkSpeed)
+        {
+            sprinting = true;
+        }
+        if (Math.Abs(vel.X) < MaxWalkSpeed)
+        {
+            sprinting = false;
         }
 
         flipped = !to_the_right;

@@ -2,48 +2,31 @@ using System.Globalization;
 using System.Numerics;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
-using static Constants;
-
+using static Constants_name.Constants;
 class Game
 {
-    int GridSizeX;
-    int GridSizeY;
+    readonly int GridSizeX;
+    readonly int GridSizeY;
 
-    int MapWidth;
-    int MapHeight;
+    bool debugModeEnabled = true;
 
-    TileType[,] tiles;
-    Morio morio;
-    Texture2D blocksTex;
-    readonly Rectangle[] blockTextureSourceRects = {
-        new(0.0f, 0.0f, 16.0f, 16.0f),
-        new(17.0f, 0.0f, 16.0f, 16.0f),
-        new(34.0f, 0.0f, 16.0f, 16.0f),
-        new(0.0f, 17.0f, 16.0f, 16.0f),
-        new(17.0f, 17.0f, 16.0f, 16.0f),
-        new(34.0f, 17.0f, 16.0f, 16.0f),
-        new(0.0f, 34.0f, 16.0f, 16.0f),
-        new(17.0f, 34.0f, 16.0f, 16.0f),
-        new(34.0f, 34.0f, 16.0f, 16.0f),
-    };
+    readonly TileType[,] tiles;
+    readonly Morio morio = new();
+
+    Texture2D blocksTex = LoadTexture("assets/tiles.png");
 
     public Game()
     {
-        GridSizeX = (int)((float)ScreenWidth / BlockSize); //16
-        GridSizeY = (int)((float)ScreenHeight / BlockSize); //10
+        GridSizeX = (int)(WindowWidth / BlockSize);
+        GridSizeY = (int)(WindowHeight / BlockSize);
 
-        if ((float)ScreenHeight % BlockSize != 0 || (float)ScreenWidth % BlockSize != 0)
+        if (WindowHeight % BlockSize != 0 || WindowWidth % BlockSize != 0)
         {
-            System.Console.WriteLine("WARNING: screensize doesn't match blocksize");
+            // line gives warning, but if you change the constant the warning goes away, so the warning is usefulA
+            Console.WriteLine("WARNING: screensize doesn't match blocksize"); 
         }
-        // System.Console.WriteLine(ScreenHeight + " / " + BlockSize + " = " + GridSizeY);
-
-        MapWidth = (int)(GridSizeX * BlockSize);
-        MapHeight = (int)(GridSizeY * BlockSize);
-        // System.Console.WriteLine(MapHeight);
 
         TileType[,] _tiles = new TileType[GridSizeY, GridSizeX * 3];
-        System.Console.WriteLine(_tiles.GetLength(1));
 
         for (int j = 0; j < _tiles.GetLength(0); j++)
         {
@@ -52,6 +35,10 @@ class Game
                 _tiles[j, i] = TileType.Empty;
                 if (j == GridSizeY - 1)
                 {
+                    _tiles[j, i] = TileType.Grass_MM;
+                }
+                else if (j == GridSizeY - 2)
+                {
                     _tiles[j, i] = TileType.Grass_TM;
                 }
             }
@@ -59,18 +46,26 @@ class Game
         }
 
         tiles = _tiles;
-        morio = new Morio();
-        blocksTex = LoadTexture("assets/tiles.png");
-
     }
 
     public void Update()
     {
+        if (IsKeyPressed(KeyboardKey.E))
+            debugModeEnabled = !debugModeEnabled;
+            
         morio.Update();
     }
 
     public void Render()
     {
+        if (!debugModeEnabled)
+        {
+            Texture2D background = LoadTexture("assets/back.png");
+            Rectangle src = new(0, 0, background.Width, background.Height);
+            Rectangle dest = new(0, 0, WindowWidth, WindowHeight);
+            DrawTexturePro(background, src, dest, new(0, 0), 0, Color.RayWhite);
+        }
+
         Vector2 origin = new(0.0f, 0.0f);
         for (int j = 0; j < tiles.GetLength(0); j++)
         {
@@ -82,8 +77,8 @@ class Game
                 }
 
                 Vector2 pos = new(i * BlockSize - morio.x, j * BlockSize);
-                Rectangle src = blockTextureSourceRects[tiles[j, i].GetHashCode()];
-                Rectangle dest = new(pos, BlockSize, BlockSize);
+                Rectangle src = blockTexSourceRects[tiles[j, i].GetHashCode()];
+                Rectangle dest = new(pos, BlockSize + 1f, BlockSize);
 
                 DrawTexturePro(blocksTex, src, dest, origin, 0.0f, Color.RayWhite);
             }
@@ -92,21 +87,24 @@ class Game
         morio.Render();
 
         // Draw gridlines for debugging purposes, do not remove
-        if (true)
+        if (debugModeEnabled)
         {
+            DrawFPS(10, 10);
+
             for (int i = 0; i < GridSizeY; i++)
             {
                 int LineY = i * (int)BlockSize;
-                // System.Console.WriteLine(LineY);
-                DrawLine(0, LineY, ScreenWidth, LineY, Color.Black);
+                // Console.WriteLine(LineY);
+                DrawLine(0, LineY, WindowWidth, LineY, Color.Black);
 
             }
             for (int i = 0; i < GridSizeX + 2; i++)
             {
                 int LineX = i * (int)BlockSize - (int)morio.x % (int)BlockSize;
-                DrawLine(LineX, 0, LineX, ScreenHeight, Color.Black);
+                DrawLine(LineX, 0, LineX, WindowHeight, Color.Black);
             }
-        }
 
+            morio.RenderDebugInfo();
+        }
     }
 }
