@@ -127,7 +127,15 @@ class Morio
         Vector2 origin = new(0.0f, 0.0f);
         Rectangle src;
 
-        int newFrameTime = (int)((float)frameCount * GetFrameTime() * 12f);
+        float frameTime = GetFrameTime();
+        float targetFrameTime = 1 / (float)TargetFps;
+        // make sure frame time doesn't differ too much from target frame time so animation doesn't flicker
+        if (frameTime < targetFrameTime - 0.1 * targetFrameTime || frameTime > targetFrameTime + 0.1 * targetFrameTime )
+        {
+            frameTime = targetFrameTime;
+        }
+
+        int newFrameTime = (int)(frameCount * frameTime * 12f);
         src = animationFrames[newFrameTime % 3];
         // Console.WriteLine(newFrameTime);
 

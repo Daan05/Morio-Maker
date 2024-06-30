@@ -9,6 +9,7 @@ namespace Constants_name
         // useful because it makes resizing the window possible without manually adjusting the block size, default = 1f
         const float constMult = 0.8f;
 
+        public const int TargetFps = 144;
         public const int WindowWidth = (int)(1530 * constMult);
         public const int WindowHeight = (int)(1020 * constMult);
         public const float BlockSize = (int)(60 * constMult);
