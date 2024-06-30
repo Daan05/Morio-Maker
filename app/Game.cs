@@ -8,12 +8,14 @@ class Game
     readonly int GridSizeX;
     readonly int GridSizeY;
 
-    bool debugModeEnabled = true;
+    bool debugModeEnabled = false;
 
     readonly TileType[,] tiles;
     readonly Morio morio = new();
 
     Texture2D blocksTex = LoadTexture("assets/tiles.png");
+    Texture2D backgroundTex = LoadTexture("assets/back.png");
+
 
     public Game()
     {
@@ -58,15 +60,26 @@ class Game
 
     public void Render()
     {
+        // Render background
         if (!debugModeEnabled)
         {
-            Texture2D background = LoadTexture("assets/back.png");
-            Rectangle src = new(0, 0, background.Width, background.Height);
-            Rectangle dest = new(0, 0, WindowWidth, WindowHeight);
-            DrawTexturePro(background, src, dest, new(0, 0), 0, Color.RayWhite);
+            Rectangle src = new(0, 0, 512f, backgroundTex.Height);
+            float backSpeed = 0.3f;
+            Rectangle dest = new(WindowWidth * 0.5f * backSpeed - backSpeed * morio.x, 0, WindowWidth, WindowHeight);
+            DrawTexturePro(backgroundTex, src, dest, new(0, 0), 0, Color.RayWhite);
+
+            if (morio.x > 0.5 * WindowWidth) 
+            {
+                dest.X += WindowWidth;
+                DrawTexturePro(backgroundTex, src, dest, new(0, 0), 0, Color.RayWhite);
+            }
+            else if (morio.x < 0.5 * WindowWidth) 
+            {
+                dest.X -= WindowWidth;
+                DrawTexturePro(backgroundTex, src, dest, new(0, 0), 0, Color.RayWhite);
+            }
         }
 
-        Vector2 origin = new(0.0f, 0.0f);
         for (int j = 0; j < tiles.GetLength(0); j++)
         {
             for (int i = 0; i < tiles.GetLength(1); i++)
@@ -78,9 +91,9 @@ class Game
 
                 Vector2 pos = new(i * BlockSize - morio.x, j * BlockSize);
                 Rectangle src = blockTexSourceRects[tiles[j, i].GetHashCode()];
-                Rectangle dest = new(pos, BlockSize + 1f, BlockSize);
+                Rectangle dest = new(pos, BlockSize + 1, BlockSize);
 
-                DrawTexturePro(blocksTex, src, dest, origin, 0.0f, Color.RayWhite);
+                DrawTexturePro(blocksTex, src, dest, new(0, 0), 0, Color.RayWhite);
             }
         }
 

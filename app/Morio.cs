@@ -25,7 +25,7 @@ class Morio
     // horizontal movement
     const float Acc = 80;
     const float MaxWalkSpeed = 80;
-    const float MaxSprintSpeed = 120;
+    const float MaxSprintSpeed = 140;
 
     const float Resistance = 0.975f;
     const float MinSpeed = 20;
@@ -135,7 +135,12 @@ class Morio
             frameTime = targetFrameTime;
         }
 
-        int newFrameTime = (int)(frameCount * frameTime * 12f);
+        float d = 12f;
+        if (vel.X > MaxWalkSpeed || vel.X < MaxWalkSpeed)
+        {
+            d = 16f;
+        }
+        int newFrameTime = (int)(frameCount * frameTime * d);
         src = animationFrames[newFrameTime % 3];
         // Console.WriteLine(newFrameTime);
 
@@ -160,14 +165,11 @@ class Morio
     void HandleHorMovement(bool to_the_right, bool shiftHeld)
     {
         float acc = Acc;
-        if (to_the_right)
+        if (!to_the_right)
         {
+            acc = -acc;
+        }
             vel.X += acc * GetFrameTime();
-        }
-        else
-        {
-            vel.X -= acc * GetFrameTime();
-        }
 
         if (flipped == to_the_right) // mario is turning, so decrease his speed so the turn is smoother
         {
