@@ -130,7 +130,7 @@ class Morio
         float frameTime = GetFrameTime();
         float targetFrameTime = 1 / (float)TargetFps;
         // make sure frame time doesn't differ too much from target frame time so animation doesn't flicker
-        if (frameTime < targetFrameTime - 0.1 * targetFrameTime || frameTime > targetFrameTime + 0.1 * targetFrameTime )
+        if (frameTime < targetFrameTime - 0.1 * targetFrameTime || frameTime > targetFrameTime + 0.1 * targetFrameTime)
         {
             frameTime = targetFrameTime;
         }
@@ -169,7 +169,7 @@ class Morio
         {
             acc = -acc;
         }
-            vel.X += acc * GetFrameTime();
+        vel.X += acc * GetFrameTime();
 
         if (flipped == to_the_right) // mario is turning, so decrease his speed so the turn is smoother
         {
