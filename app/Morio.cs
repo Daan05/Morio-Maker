@@ -22,6 +22,11 @@ class Morio
     bool is_grounded = false;
     bool sprinting = false; // false means he's walking, doesn't matter if he's in the air or not
 
+    float targetAnimationFrameTime = 0.080f; // Time a single animationFrame stays on screen
+    float sumAnimationFrameTime = 0; // Every animationFrame this gets set to 0 again
+
+    int animationFrameIndex = 0;
+
     // horizontal movement
     const float Acc = 80;
     const float MaxWalkSpeed = 80;
@@ -128,21 +133,22 @@ class Morio
         Rectangle src;
 
         float frameTime = GetFrameTime();
-        float targetFrameTime = 1 / (float)TargetFps;
-        // make sure frame time doesn't differ too much from target frame time so animation doesn't flicker
-        if (frameTime < targetFrameTime - 0.1 * targetFrameTime || frameTime > targetFrameTime + 0.1 * targetFrameTime)
-        {
-            frameTime = targetFrameTime;
-        }
+        sumAnimationFrameTime += frameTime;
 
-        float d = 12f;
-        if (vel.X > MaxWalkSpeed || vel.X < MaxWalkSpeed)
+        float speed = MathF.Sqrt(vel.X * vel.X);// + vel.Y * vel.Y);
+        targetAnimationFrameTime = (100 - speed * 0.8f) / 800;
+
+        if (sumAnimationFrameTime > targetAnimationFrameTime)
         {
-            d = 16f;
+            animationFrameIndex++;
+            sumAnimationFrameTime = 0f;
         }
-        int newFrameTime = (int)(frameCount * frameTime * d);
-        src = animationFrames[newFrameTime % 3];
-        // Console.WriteLine(newFrameTime);
+        src = animationFrames[animationFrameIndex % 3];
+
+        if (Math.Abs(vel.X) < 0.00001 && Math.Abs(vel.Y) < 0.00001)
+        {
+            src = animationFrames[0];
+        }
 
         Vector2 pos = new(WindowWidth * 0.5f, WindowHeight - y);
         Rectangle dest = new(pos, BlockSize, BlockSize * 2);
