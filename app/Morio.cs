@@ -25,7 +25,7 @@ class Morio
     // horizontal movement
     const float Acc = 80;
     const float MaxWalkSpeed = 80;
-    const float MaxSprintSpeed = 120;
+    const float MaxSprintSpeed = 140;
 
     const float Resistance = 0.975f;
     const float MinSpeed = 20;
@@ -127,7 +127,20 @@ class Morio
         Vector2 origin = new(0.0f, 0.0f);
         Rectangle src;
 
-        int newFrameTime = (int)((float)frameCount * GetFrameTime() * 12f);
+        float frameTime = GetFrameTime();
+        float targetFrameTime = 1 / (float)TargetFps;
+        // make sure frame time doesn't differ too much from target frame time so animation doesn't flicker
+        if (frameTime < targetFrameTime - 0.1 * targetFrameTime || frameTime > targetFrameTime + 0.1 * targetFrameTime)
+        {
+            frameTime = targetFrameTime;
+        }
+
+        float d = 12f;
+        if (vel.X > MaxWalkSpeed || vel.X < MaxWalkSpeed)
+        {
+            d = 16f;
+        }
+        int newFrameTime = (int)(frameCount * frameTime * d);
         src = animationFrames[newFrameTime % 3];
         // Console.WriteLine(newFrameTime);
 
@@ -152,14 +165,11 @@ class Morio
     void HandleHorMovement(bool to_the_right, bool shiftHeld)
     {
         float acc = Acc;
-        if (to_the_right)
+        if (!to_the_right)
         {
-            vel.X += acc * GetFrameTime();
+            acc = -acc;
         }
-        else
-        {
-            vel.X -= acc * GetFrameTime();
-        }
+        vel.X += acc * GetFrameTime();
 
         if (flipped == to_the_right) // mario is turning, so decrease his speed so the turn is smoother
         {
