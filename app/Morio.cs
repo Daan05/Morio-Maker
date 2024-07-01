@@ -167,6 +167,11 @@ class Morio
         DrawText(posText, 10, 35, 20, Color.Red);
         string velText = string.Format("vel:  {0} {1}", (int)vel.X, (int)vel.Y);
         DrawText(velText, 10, 55, 20, Color.Red);
+
+        DrawCircle((int)(WindowWidth * 0.5f), (int)(WindowHeight - y), 4, Color.Red);
+        DrawCircle((int)(WindowWidth * 0.5f + BlockSize), (int)(WindowHeight - y), 4, Color.Red);
+        DrawCircle((int)(WindowWidth * 0.5f), (int)(WindowHeight - y + BlockSize * 2), 4, Color.Red);
+        DrawCircle((int)(WindowWidth * 0.5f + BlockSize), (int)(WindowHeight - y + BlockSize * 2), 4, Color.Red);
     }
 
     void HandleHorMovement(bool to_the_right, bool shiftHeld)
