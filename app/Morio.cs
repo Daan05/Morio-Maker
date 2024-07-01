@@ -135,7 +135,7 @@ class Morio
         float frameTime = GetFrameTime();
         sumAnimationFrameTime += frameTime;
 
-        float speed = MathF.Sqrt(vel.X * vel.X);// + vel.Y * vel.Y);
+        float speed = MathF.Abs(vel.X);
         targetAnimationFrameTime = (100 - speed * 0.8f) / 800;
 
         if (sumAnimationFrameTime > targetAnimationFrameTime)
