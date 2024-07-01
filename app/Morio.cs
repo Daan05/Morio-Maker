@@ -136,7 +136,7 @@ class Morio
         sumAnimationFrameTime += frameTime;
 
         float speed = MathF.Abs(vel.X);
-        targetAnimationFrameTime = (100 - speed * 0.8f) / 800;
+        targetAnimationFrameTime = (100 - speed * 0.5f) / 800;
 
         if (sumAnimationFrameTime > targetAnimationFrameTime)
         {
@@ -148,6 +148,7 @@ class Morio
         if (Math.Abs(vel.X) < 0.00001 && Math.Abs(vel.Y) < 0.00001)
         {
             src = animationFrames[0];
+            animationFrameIndex = 0;
         }
 
         Vector2 pos = new(WindowWidth * 0.5f, WindowHeight - y);
