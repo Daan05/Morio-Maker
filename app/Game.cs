@@ -79,12 +79,14 @@ class Game
         {
             if (morio.vel.X > 0 && tiles[indexY, idX + 1].GetHashCode() != -1) // if inside of solid block
             {
+                // move morio left
                 morio.x = idX * BlockSize;
                 morio.vel.X = 0;
                 morio.sumAnimationFrameTime = 0;
             }
             else if (morio.vel.X < 0 && tiles[indexY, idX].GetHashCode() != -1) // if inside of solid block
             {
+                // move morio right
                 morio.x = (idX + 1) * BlockSize;
                 morio.vel.X = 0;
                 morio.sumAnimationFrameTime = 0;
@@ -117,19 +119,11 @@ class Game
         {
             Rectangle src = new(0, 0, 512f, backgroundTex.Height);
             float backTexSpeed = 0.3f;
-            Rectangle dest = new(WindowWidth * 0.5f - backTexSpeed * morio.x, 0, WindowWidth, WindowHeight);
+            float backgroundPos = (backTexSpeed * -morio.x) % WindowWidth;
+            Rectangle dest = new(backgroundPos, 0, WindowWidth, WindowHeight);
             DrawTexturePro(backgroundTex, src, dest, new(0, 0), 0, Color.RayWhite);
-
-            if (morio.x > 0.5 * BlockSize * tiles.GetLength(1))
-            {
-                dest.X += WindowWidth;
-                DrawTexturePro(backgroundTex, src, dest, new(0, 0), 0, Color.RayWhite);
-            }
-            else if (morio.x < 0.5 * BlockSize * tiles.GetLength(1))
-            {
-                dest.X -= WindowWidth;
-                DrawTexturePro(backgroundTex, src, dest, new(0, 0), 0, Color.RayWhite);
-            }
+            dest.X += WindowWidth;
+            DrawTexturePro(backgroundTex, src, dest, new(0, 0), 0, Color.RayWhite);
         }
 
         for (int j = 0; j < tiles.GetLength(0); j++) // y
