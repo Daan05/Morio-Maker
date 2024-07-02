@@ -21,16 +21,16 @@ public class Program
         SetWindowIcon(windowIcon);
 
         SetTargetFPS(TargetFps);
-        // SetWindowState(ConfigFlags.VSyncHint);
 
         Game game = new();
 
         // Main game loop
         while (!WindowShouldClose())
         {
+            // Move stuff
             game.Update();
 
-            // Render
+            // Render Stuff
             BeginDrawing();
             ClearBackground(Color.RayWhite);
 

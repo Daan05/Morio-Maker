@@ -45,13 +45,9 @@ class Game
                 {
                     _tiles[j, i] = TileType.Grass_TM;
                 }
-                // else if (j == GridSizeY - 5 && i > 20)
-                // {
-                //     _tiles[j, i] = TileType.;
-                // }
             }
-
         }
+
         _tiles[11, 25] = TileType.Platform_L;
         _tiles[11, 26] = TileType.Platform_M;
         _tiles[11, 27] = TileType.Platform_R;
@@ -72,9 +68,9 @@ class Game
         int idY = (int)(morio.y / BlockSize); // top
 
         int indexY = tiles.GetLength(0) - idY;
-        Console.WriteLine("idX = {0} idY = {1}", idX, idY);
+        //Console.WriteLine("idX = {0} idY = {1}", idX, idY);
 
-        // check horizontal collisions
+        // check horizontal collisions with tiles
         if (morio.x % BlockSize != 0) // If Morio is in only one tile there is no need to check collisions
         {
             if (morio.vel.X > 0 && tiles[indexY, idX + 1].GetHashCode() != -1) // if inside of solid block
@@ -94,17 +90,17 @@ class Game
         }
 
         // Check vertical collisions with tiles
-        if (morio.y % BlockSize != 0) // If Morio is in only one tile there is no need to check collisions
+        if (morio.y % BlockSize != 0) // If Morio is in only two tiles there is no need to check collisions
         {
             if (morio.vel.Y > 0 && (tiles[indexY - 1, idX].GetHashCode() != -1 || tiles[indexY - 1, idX + 1].GetHashCode() != -1)) // if inside of solid block
             {
-                // move morio down
+                // Move Morio down
                 morio.y = (GridSizeY - indexY) * BlockSize;
                 morio.vel.Y = 0;
             }
             else if (morio.vel.Y < 0 && (tiles[indexY + 1, idX].GetHashCode() != -1 || tiles[indexY + 1, idX + 1].GetHashCode() != -1)) // if inside of solid block
             {
-                // move morio up
+                // Move Morio up
                 morio.y = (GridSizeY - indexY + 1) * BlockSize;
                 morio.SetGrounded();
             }
@@ -121,11 +117,13 @@ class Game
             float backTexSpeed = 0.3f;
             float backgroundPos = (backTexSpeed * -morio.x) % WindowWidth;
             Rectangle dest = new(backgroundPos, 0, WindowWidth, WindowHeight);
+
             DrawTexturePro(backgroundTex, src, dest, new(0, 0), 0, Color.RayWhite);
             dest.X += WindowWidth;
             DrawTexturePro(backgroundTex, src, dest, new(0, 0), 0, Color.RayWhite);
         }
 
+        // Render tiles
         for (int j = 0; j < tiles.GetLength(0); j++) // y
         {
             for (int i = 0; i < tiles.GetLength(1); i++) // x
@@ -143,6 +141,7 @@ class Game
             }
         }
 
+        // Render Morio
         morio.Render();
 
         // Draw gridlines for debugging purposes, do not remove
@@ -150,13 +149,14 @@ class Game
         {
             DrawFPS(10, 10);
 
+            // Horizontal lines
             for (int i = 0; i < GridSizeY; i++)
             {
                 int LineY = i * (int)BlockSize;
-                // Console.WriteLine(LineY);
                 DrawLine(0, LineY, WindowWidth, LineY, Color.Black);
 
             }
+            // Vertical lines
             for (int i = 0; i < GridSizeX + 2; i++)
             {
                 int LineX = i * (int)BlockSize - (int)morio.x % (int)BlockSize;
