@@ -86,7 +86,7 @@ class Game
             }
            */ 
 
-            if (tiles[index, idX].GetHashCode() != -1) // if inside of solid block
+            if (tiles[index + 1, idX].GetHashCode() != -1) // if inside of solid block
             {
                 // move morio up
                 //morio.y = idY * BlockSize;
