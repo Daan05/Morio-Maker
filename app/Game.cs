@@ -24,7 +24,7 @@ class Game
 
         if (WindowHeight % BlockSize != 0 || WindowWidth % BlockSize != 0)
         {
-            // line gives warning, but if you change the constant the warning goes away, so the warning is usefulA
+            // line gives warning, but if you change the constant the warning goes away, so the warning is useful
             Console.WriteLine("WARNING: screensize doesn't match blocksize");
         }
 
@@ -65,24 +65,24 @@ class Game
         {
             Rectangle src = new(0, 0, 512f, backgroundTex.Height);
             float backTexSpeed = 0.3f;
-            Rectangle dest = new(WindowWidth * 0.5f * backTexSpeed - backTexSpeed * morio.x, 0, WindowWidth, WindowHeight);
+            Rectangle dest = new(WindowWidth * 0.5f - backTexSpeed * morio.x, 0, WindowWidth, WindowHeight);
             DrawTexturePro(backgroundTex, src, dest, new(0, 0), 0, Color.RayWhite);
 
-            if (morio.x > 0.5 * WindowWidth)
+            if (morio.x > 0.5 * BlockSize * tiles.GetLength(1))
             {
                 dest.X += WindowWidth;
                 DrawTexturePro(backgroundTex, src, dest, new(0, 0), 0, Color.RayWhite);
             }
-            else if (morio.x < 0.5 * WindowWidth)
+            else if (morio.x < 0.5 * BlockSize * tiles.GetLength(1))
             {
                 dest.X -= WindowWidth;
                 DrawTexturePro(backgroundTex, src, dest, new(0, 0), 0, Color.RayWhite);
             }
         }
 
-        for (int j = 0; j < tiles.GetLength(0); j++)
+        for (int j = 0; j < tiles.GetLength(0); j++) // y
         {
-            for (int i = 0; i < tiles.GetLength(1); i++)
+            for (int i = 0; i < tiles.GetLength(1); i++) // x
             {
                 if (tiles[j, i].GetHashCode() == -1)
                 {
@@ -98,7 +98,7 @@ class Game
         }
 
         morio.Render();
-
+        
         // Draw gridlines for debugging purposes, do not remove
         if (debugModeEnabled)
         {

@@ -124,6 +124,11 @@ class Morio
         // Console.WriteLine(y);
         x += vel.X * GetFrameTime() * BlockSize * 0.1f; // multiply by block size because speed should be based on blocks, not space on the screen
         y += vel.Y * GetFrameTime() * BlockSize * 0.1f; // multiply by 0.1 because it makes the constants easier to work with
+
+        if (x < 0f)
+        {
+            x = 0;
+        }
     }
 
     public void Render()
@@ -168,10 +173,20 @@ class Morio
         string velText = string.Format("vel:  {0} {1}", (int)vel.X, (int)vel.Y);
         DrawText(velText, 10, 55, 20, Color.Red);
 
+        // 4 points that outline Morio's hitbox
         DrawCircle((int)(WindowWidth * 0.5f), (int)(WindowHeight - y), 4, Color.Red);
         DrawCircle((int)(WindowWidth * 0.5f + BlockSize), (int)(WindowHeight - y), 4, Color.Red);
         DrawCircle((int)(WindowWidth * 0.5f), (int)(WindowHeight - y + BlockSize * 2), 4, Color.Red);
         DrawCircle((int)(WindowWidth * 0.5f + BlockSize), (int)(WindowHeight - y + BlockSize * 2), 4, Color.Red);
+
+        // Marks the 2/4 blocks morio is in
+        int idX = (int)(x / BlockSize);
+        int idY = (int)(y / BlockSize);
+        // System.Console.WriteLine(idX + " " + BlockSize);
+        DrawRectangle((int)((idX + 15) * BlockSize - x), (int)(WindowHeight - y + BlockSize), (int)BlockSize, (int)BlockSize, new(128, 128, 128, 128));
+        DrawRectangle((int)((idX + 15) * BlockSize - x), (int)(WindowHeight - y), (int)BlockSize, (int)BlockSize, new(128, 128, 128, 128));
+        DrawRectangle((int)((idX + 16) * BlockSize - x), (int)(WindowHeight - y + BlockSize), (int)BlockSize, (int)BlockSize, new(128, 128, 128, 128));
+        DrawRectangle((int)((idX + 16) * BlockSize - x), (int)(WindowHeight - y), (int)BlockSize, (int)BlockSize, new(128, 128, 128, 128));
     }
 
     void HandleHorMovement(bool to_the_right, bool shiftHeld)
