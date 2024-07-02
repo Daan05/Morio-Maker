@@ -9,7 +9,7 @@ class Morio
     Texture2D tex;
     public float x;
     public float y;
-    Vector2 vel = new(0f, 0f);
+    public Vector2 vel = new(0f, 0f);
     uint frameCount = 0;
     readonly Rectangle[] animationFrames = {
         new(0, 2, 15, 28),
@@ -131,6 +131,8 @@ class Morio
         {
             x = 0;
         }
+
+        is_grounded = false;
     }
 
     public void Render()
