@@ -10,7 +10,6 @@ class Morio
     public float x;
     public float y;
     public Vector2 vel = new(0f, 0f);
-    uint frameCount = 0;
     readonly Rectangle[] animationFrames = {
         new(0, 2, 15, 28),
         new(16, 2, 15, 28),
@@ -23,7 +22,7 @@ class Morio
     bool sprinting = false; // false means he's walking, doesn't matter if he's in the air or not
 
     float targetAnimationFrameTime = 0.080f; // Time a single animationFrame stays on screen
-    float sumAnimationFrameTime = 0; // Every animationFrame this gets set to 0 again
+    public float sumAnimationFrameTime = 0; // Every animationFrame this gets set to 0 again
 
     int animationFrameIndex = 0;
 
@@ -50,7 +49,6 @@ class Morio
 
     public void Update()
     {
-        frameCount++;
         float grav_mult = 1;
 
         if (IsKeyDown(KeyboardKey.Space))
@@ -115,7 +113,6 @@ class Morio
             {
                 // speed below the desired minimal speed, so make speed 0
                 vel.X = 0;
-                frameCount = 0;
             }
             else
             {
@@ -141,8 +138,7 @@ class Morio
         Vector2 origin = new(0.0f, 0.0f);
         Rectangle src;
 
-        float frameTime = GetFrameTime();
-        sumAnimationFrameTime += frameTime;
+        sumAnimationFrameTime += GetFrameTime();
 
         float speed = MathF.Abs(vel.X);
         targetAnimationFrameTime = (100 - speed * 0.5f) / 800;

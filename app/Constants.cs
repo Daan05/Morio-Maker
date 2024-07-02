@@ -16,6 +16,7 @@ namespace Constants_name
 
         static Vector2 texSize = new(16f, 16f);
         public static readonly Rectangle[] blockTexSourceRects = {
+            // ground
             new(0f, 0f, texSize),
             new(17f, 0f, texSize),
             new(34f, 0f, texSize),
@@ -25,6 +26,10 @@ namespace Constants_name
             new(0f, 34f, texSize),
             new(17f, 34f, texSize),
             new(34f, 34f, texSize),
+            // platform
+            new(51f, 0, texSize),
+            new(68f, 0, texSize),
+            new(102, 0, texSize),
         };
     }
 }

@@ -21,5 +21,7 @@ enum TileType
     Grass_BL = 6,
     Grass_BM = 7,
     Grass_BR = 8,
-    Brick = 9
+    Platform_L = 9,
+    Platform_M = 10,
+    Platform_R = 11,
 }
