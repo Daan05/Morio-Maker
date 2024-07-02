@@ -81,6 +81,15 @@ class Morio
         bool shiftHeld = IsKeyDown(KeyboardKey.LeftShift) || IsKeyDown(KeyboardKey.RightShift);
         bool horKeyPressed = false;
 
+        if (IsKeyDown(KeyboardKey.W))
+        {
+            vel.Y += Acc * GetFrameTime();
+        }
+        if (IsKeyDown(KeyboardKey.S))
+        {
+            vel.Y -= Acc * GetFrameTime();
+        }
+
         if (IsKeyDown(KeyboardKey.Right) || IsKeyDown(KeyboardKey.D))
         {
             HandleHorMovement(true, shiftHeld);
@@ -182,11 +191,15 @@ class Morio
         // Marks the 2/4 blocks morio is in
         int idX = (int)(x / BlockSize);
         int idY = (int)(y / BlockSize);
-        // System.Console.WriteLine(idX + " " + BlockSize);
-        DrawRectangle((int)((idX + 15) * BlockSize - x), (int)(WindowHeight - y + BlockSize), (int)BlockSize, (int)BlockSize, new(128, 128, 128, 128));
-        DrawRectangle((int)((idX + 15) * BlockSize - x), (int)(WindowHeight - y), (int)BlockSize, (int)BlockSize, new(128, 128, 128, 128));
-        DrawRectangle((int)((idX + 16) * BlockSize - x), (int)(WindowHeight - y + BlockSize), (int)BlockSize, (int)BlockSize, new(128, 128, 128, 128));
-        DrawRectangle((int)((idX + 16) * BlockSize - x), (int)(WindowHeight - y), (int)BlockSize, (int)BlockSize, new(128, 128, 128, 128));
+        System.Console.WriteLine(idY + " " + BlockSize);
+        Color Grey = new(128, 128, 128, 128);
+        DrawRectangle((int)((idX + 15) * BlockSize - x), (int)(WindowHeight - idY * BlockSize + BlockSize), (int)BlockSize, (int)BlockSize, Grey);
+        DrawRectangle((int)((idX + 15) * BlockSize - x), (int)(WindowHeight - idY * BlockSize), (int)BlockSize, (int)BlockSize, Grey);
+        DrawRectangle((int)((idX + 15) * BlockSize - x), (int)(WindowHeight - idY * BlockSize - BlockSize), (int)BlockSize, (int)BlockSize, Grey);
+
+        DrawRectangle((int)((idX + 16) * BlockSize - x), (int)(WindowHeight - idY * BlockSize + BlockSize), (int)BlockSize, (int)BlockSize, Grey);
+        DrawRectangle((int)((idX + 16) * BlockSize - x), (int)(WindowHeight - idY * BlockSize), (int)BlockSize, (int)BlockSize, Grey);
+        DrawRectangle((int)((idX + 16) * BlockSize - x), (int)(WindowHeight - idY * BlockSize - BlockSize), (int)BlockSize, (int)BlockSize, Grey);
     }
 
     void HandleHorMovement(bool to_the_right, bool shiftHeld)

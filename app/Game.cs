@@ -22,7 +22,7 @@ class Game
         GridSizeX = (int)(WindowWidth / BlockSize);
         GridSizeY = (int)(WindowHeight / BlockSize);
 
-        if (WindowHeight % BlockSize != 0 || WindowWidth % BlockSize != 0)
+        if (WindowHeight % BlockSize != 0 || WindowWidth % BlockSize != 0 && GridSizeX != 0)
         {
             // line gives warning, but if you change the constant the warning goes away, so the warning is useful
             Console.WriteLine("WARNING: screensize doesn't match blocksize");
@@ -98,7 +98,7 @@ class Game
         }
 
         morio.Render();
-        
+
         // Draw gridlines for debugging purposes, do not remove
         if (debugModeEnabled)
         {

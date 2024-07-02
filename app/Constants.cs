@@ -7,7 +7,7 @@ namespace Constants_name
     public static class Constants
     {
         // useful because it makes resizing the window possible without manually adjusting the block size, default = 1f
-        const float constMult = 1.0f;
+        const float constMult = 0.8f;
 
         public const int TargetFps = 144;
         public const int WindowWidth = (int)(1800 * constMult);
