@@ -53,13 +53,6 @@ class Morio
         frameCount++;
         float grav_mult = 1;
 
-        if (y <= BlockSize * 4f)
-        {
-            y = BlockSize * 4f;
-            vel.Y = 0f;
-            is_grounded = true;
-        }
-
         if (IsKeyDown(KeyboardKey.Space))
         {
             if (is_grounded)
@@ -191,7 +184,7 @@ class Morio
         // Marks the 2/4 blocks morio is in
         int idX = (int)(x / BlockSize);
         int idY = (int)(y / BlockSize);
-        System.Console.WriteLine(idY + " " + BlockSize);
+        //System.Console.WriteLine(idY + " " + BlockSize);
         Color Grey = new(128, 128, 128, 128);
         DrawRectangle((int)((idX + 15) * BlockSize - x), (int)(WindowHeight - idY * BlockSize + BlockSize), (int)BlockSize, (int)BlockSize, Grey);
         DrawRectangle((int)((idX + 15) * BlockSize - x), (int)(WindowHeight - idY * BlockSize), (int)BlockSize, (int)BlockSize, Grey);
@@ -233,5 +226,11 @@ class Morio
         }
 
         flipped = !to_the_right;
+    }
+
+    public void SetGrounded()
+    {
+        vel.Y = 0f;
+        is_grounded = true;
     }
 }

@@ -3,6 +3,7 @@ using System.Numerics;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
 using static Constants_name.Constants;
+
 class Game
 {
     readonly int GridSizeX;
@@ -30,9 +31,9 @@ class Game
 
         TileType[,] _tiles = new TileType[GridSizeY, GridSizeX * 8];
 
-        for (int j = 0; j < _tiles.GetLength(0); j++)
+        for (int j = 0; j < _tiles.GetLength(0); j++) // y
         {
-            for (int i = 0; i < _tiles.GetLength(1); i++)
+            for (int i = 0; i < _tiles.GetLength(1); i++) // x
             {
                 _tiles[j, i] = TileType.Empty;
                 if (j == GridSizeY - 1)
@@ -56,6 +57,43 @@ class Game
             debugModeEnabled = !debugModeEnabled;
 
         morio.Update();
+
+        // Check Morio collisions with tiles
+        // -------------------------------------------------
+        int idX = (int)(morio.x / BlockSize); // left
+        int idY = (int)(morio.y / BlockSize); // top
+
+        int index = tiles.GetLength(0) - idY;
+        System.Console.WriteLine(index + " " + morio.y);
+
+        // check horizontal collisions
+        if (morio.x % BlockSize != 0) // If Morio is in only one tile there is no need to check collisions
+        {
+            // horizontal collisions stuff
+        }
+
+        // Check vertical collisions with tiles
+        if (morio.y % BlockSize != 0) // If Morio is in only one tile there is no need to check collisions
+        {
+            // Vertical collisions stuff
+           
+            /*
+            if (tiles[tiles.GetLength(0) - idY, idX].GetHashCode() != -1) // if inside of solid block
+            {
+                // move morio down
+                //morio.y = WindowHeight - (tiles.GetLength(0) - idY - 1) * BlockSize;
+                System.Threading.Thread.Sleep(5000);
+            }
+           */ 
+
+            if (tiles[index, idX].GetHashCode() != -1) // if inside of solid block
+            {
+                // move morio up
+                //morio.y = idY * BlockSize;
+                morio.y = 4f * BlockSize;
+                morio.SetGrounded();
+            }
+        }
     }
 
     public void Render()
