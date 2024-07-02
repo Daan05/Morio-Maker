@@ -3,6 +3,7 @@ using System.Numerics;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
 using static Constants_name.Constants;
+using System.Runtime.Versioning;
 
 class Game
 {
@@ -93,13 +94,13 @@ class Game
         // Check vertical collisions with tiles
         if (morio.y % BlockSize != 0) // If Morio is in only one tile there is no need to check collisions
         {
-            if (tiles[indexY - 1, idX].GetHashCode() != -1 || tiles[indexY - 1, idX + 1].GetHashCode() != -1) // if inside of solid block
+            if (morio.vel.Y > 0 && (tiles[indexY - 1, idX].GetHashCode() != -1 || tiles[indexY - 1, idX + 1].GetHashCode() != -1)) // if inside of solid block
             {
                 // move morio down
                 morio.y = (GridSizeY - indexY) * BlockSize;
                 morio.vel.Y = 0;
             }
-            else if (tiles[indexY + 1, idX].GetHashCode() != -1 || tiles[indexY + 1, idX + 1].GetHashCode() != -1) // if inside of solid block
+            else if (morio.vel.Y < 0 && (tiles[indexY + 1, idX].GetHashCode() != -1 || tiles[indexY + 1, idX + 1].GetHashCode() != -1)) // if inside of solid block
             {
                 // move morio up
                 morio.y = (GridSizeY - indexY + 1) * BlockSize;
