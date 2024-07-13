@@ -35,9 +35,9 @@ class Morio
     const float MinSpeed = 20;
 
     // vertical movement
-    const float JumpVel = 180;
+    const float JumpVel = 150;
     const float GravMultIfJumpHeld = 0.5f;
-    const float Gravity = -700;
+    const float Gravity = -500;
 
 
     public Morio()

@@ -1,9 +1,7 @@
-using System.Globalization;
 using System.Numerics;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
 using static Constants_name.Constants;
-using System.Runtime.Versioning;
 
 class Game
 {
@@ -24,13 +22,15 @@ class Game
         GridSizeX = (int)(WindowWidth / BlockSize);
         GridSizeY = (int)(WindowHeight / BlockSize);
 
-        if (WindowHeight % BlockSize != 0 || WindowWidth % BlockSize != 0 && GridSizeX != 0)
+        if (WindowHeight % BlockSize == 0 && WindowWidth % BlockSize == 0)
         {
-            // line gives warning, but if you change the constant the warning goes away, so the warning is useful
-            Console.WriteLine("WARNING: screensize doesn't match blocksize");
+            Console.WriteLine("screensize matches blocksize");
+            Console.WriteLine(GridSizeY);
         }
 
         TileType[,] _tiles = new TileType[GridSizeY, GridSizeX * 8];
+                    Console.WriteLine(_tiles.GetLength(0));
+
 
         for (int j = 0; j < _tiles.GetLength(0); j++) // y
         {
@@ -52,6 +52,11 @@ class Game
         _tiles[11, 26] = TileType.Platform_M;
         _tiles[11, 27] = TileType.Platform_R;
 
+
+        _tiles[12, 25] = TileType.Platform_L;
+        _tiles[12, 26] = TileType.Platform_M;
+        _tiles[12, 27] = TileType.Platform_R;
+
         tiles = _tiles;
     }
 
@@ -67,45 +72,63 @@ class Game
         int idX = (int)(morio.x / BlockSize); // left
         int idY = (int)(morio.y / BlockSize); // top
 
-        int indexY = tiles.GetLength(0) - idY;
-        //Console.WriteLine("idX = {0} idY = {1}", idX, idY);
+        int indexY = GridSizeY - idY;
 
         // check horizontal collisions with tiles
-        if (morio.x % BlockSize != 0) // If Morio is in only one tile there is no need to check collisions
+        List<Vector2> t = new List<Vector2>();
+        if (morio.vel.X > 0 && tiles[indexY, idX + 1].GetHashCode() != -1) // if inside of solid block
         {
-            if (morio.vel.X > 0 && tiles[indexY, idX + 1].GetHashCode() != -1) // if inside of solid block
-            {
-                // move morio left
-                morio.x = idX * BlockSize;
-                morio.vel.X = 0;
-                morio.sumAnimationFrameTime = 0;
-            }
-            else if (morio.vel.X < 0 && tiles[indexY, idX].GetHashCode() != -1) // if inside of solid block
-            {
-                // move morio right
-                morio.x = (idX + 1) * BlockSize;
-                morio.vel.X = 0;
-                morio.sumAnimationFrameTime = 0;
-            }
+            t.Add(new Vector2(idX * BlockSize - morio.x, 0));
+            
+            // move morio left
+            morio.x = idX * BlockSize;
+            morio.vel.X = 0;
+            morio.sumAnimationFrameTime = 0;
+        }
+        else if (morio.vel.X < 0 && tiles[indexY, idX].GetHashCode() != -1) // if inside of solid block
+        {
+            t.Add(new Vector2((idX + 1) * BlockSize - morio.x, 0));
+            // move morio right
+            morio.x = (idX + 1) * BlockSize;
+            morio.vel.X = 0;
+            morio.sumAnimationFrameTime = 0;
         }
 
         // Check vertical collisions with tiles
-        if (morio.y % BlockSize != 0) // If Morio is in only two tiles there is no need to check collisions
+        if (morio.vel.Y > 0 && (tiles[indexY - 1, idX].GetHashCode() != -1 || tiles[indexY - 1, idX + 1].GetHashCode() != -1)) // if inside of solid block
         {
-            if (morio.vel.Y > 0 && (tiles[indexY - 1, idX].GetHashCode() != -1 || tiles[indexY - 1, idX + 1].GetHashCode() != -1)) // if inside of solid block
-            {
-                // Move Morio down
-                morio.y = (GridSizeY - indexY) * BlockSize;
-                morio.vel.Y = 0;
-            }
-            else if (morio.vel.Y < 0 && (tiles[indexY + 1, idX].GetHashCode() != -1 || tiles[indexY + 1, idX + 1].GetHashCode() != -1)) // if inside of solid block
-            {
-                // Move Morio up
-                morio.y = (GridSizeY - indexY + 1) * BlockSize;
-                morio.SetGrounded();
-            }
-
+            t.Add(new Vector2(0, morio.y - (indexY - 1) * BlockSize));
+            // Move Morio down
+            morio.y = (GridSizeY - indexY) * BlockSize;
+            morio.vel.Y = 0;
         }
+        else if (morio.vel.Y < 0 && (tiles[indexY + 1, idX].GetHashCode() != -1 || tiles[indexY + 1, idX + 1].GetHashCode() != -1)) // if inside of solid block
+        {
+            t.Add(new Vector2(0, (GridSizeY - indexY + 1) * BlockSize - morio.y));
+            // Move Morio up
+            morio.y = (GridSizeY - indexY + 1) * BlockSize;
+            morio.SetGrounded();
+        }
+
+        float x = 0;
+        float y = 0;
+        foreach (Vector2 a in t) 
+        {
+            if (Math.Abs(a.X) > Math.Abs(x)) {
+                x = a.X;
+            }
+            else if (Math.Abs(a.Y) > Math.Abs(y)) {
+                y = a.Y;
+            }
+        //    Console.WriteLine((GridSizeY - indexY + 1) * BlockSize - morio.y); 
+            // Console.WriteLine(a.X);
+        }
+        if (Math.Abs(x) > Math.Abs(y)) {
+            // morio.x += x;
+        } else {
+            // morio.y += y;
+        }
+
     }
 
     public void Render()
@@ -115,7 +138,7 @@ class Game
         {
             Rectangle src = new(0, 0, 512f, backgroundTex.Height);
             float backTexSpeed = 0.3f;
-            float backgroundPos = (backTexSpeed * -morio.x) % WindowWidth;
+            float backgroundPos = backTexSpeed * -morio.x % WindowWidth;
             Rectangle dest = new(backgroundPos, 0, WindowWidth, WindowHeight);
 
             DrawTexturePro(backgroundTex, src, dest, new(0, 0), 0, Color.RayWhite);
