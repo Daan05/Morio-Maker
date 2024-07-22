@@ -49,7 +49,7 @@ class Morio
 
     public void Update()
     {
-        float grav_mult = 1;
+        float gravMult = 1;
 
         // Handle jump event
         // if space bar is helt for longer Morio will jump higher
@@ -62,20 +62,19 @@ class Morio
             }
             else if (vel.Y >= 0)
             {
-                grav_mult = GravMultIfJumpHeld;
+                gravMult = GravMultIfJumpHeld;
             }
         }
 
         // Jump if Morio is on the ground
         if (!is_grounded)
         {
-            vel.Y += Gravity * grav_mult * GetFrameTime();
+            // vel.Y += Gravity * gravMult * GetFrameTime();
         }
 
         bool shiftHeld = IsKeyDown(KeyboardKey.LeftShift) || IsKeyDown(KeyboardKey.RightShift);
         bool horKeyPressed = false;
 
-        /*
         if (IsKeyDown(KeyboardKey.W))
         {
             vel.Y += Acc * GetFrameTime();
@@ -84,7 +83,6 @@ class Morio
         {
             vel.Y -= Acc * GetFrameTime();
         }
-        */
 
         // Move horizontaly
         if (IsKeyDown(KeyboardKey.Right) || IsKeyDown(KeyboardKey.D))
