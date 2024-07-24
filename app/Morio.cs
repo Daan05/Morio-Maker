@@ -69,7 +69,7 @@ class Morio
         // Jump if Morio is on the ground
         if (!is_grounded)
         {
-            // vel.Y += Gravity * gravMult * GetFrameTime();
+            vel.Y += Gravity * gravMult * GetFrameTime();
         }
 
         bool shiftHeld = IsKeyDown(KeyboardKey.LeftShift) || IsKeyDown(KeyboardKey.RightShift);
@@ -133,10 +133,10 @@ class Morio
 
         // Keep Morio on the platform part
         // Move to Game.cs where Morio collisions get checked????
-        if (x < 0f)
-        {
-            x = 0;
-        }
+        // if (x < 0f)
+        // {
+        //     x = 0;
+        // }
         // else if (x > value)
 
         // Set is_grounded to false

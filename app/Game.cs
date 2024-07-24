@@ -81,7 +81,7 @@ class Game
         float y = 0;
 
         // check horizontal collisions with tiles
-        if (morio.vel.X > 0 && tiles[indexY, idX + 1].GetHashCode() != -1) // if inside of solid block
+        if (morio.vel.X > 0 && (tiles[indexY, idX + 1].GetHashCode() != -1 || tiles[indexY + 1, idX + 1].GetHashCode() != -1)) // if inside of solid block
         {
             x = idX * BlockSize - morio.x; 
             
@@ -90,7 +90,7 @@ class Game
             // morio.vel.X = 0;
             morio.sumAnimationFrameTime = 0;
         }
-        else if (morio.vel.X < 0 && tiles[indexY, idX].GetHashCode() != -1) // if inside of solid block
+        else if (morio.vel.X < 0 && (tiles[indexY, idX].GetHashCode() != -1 || tiles[indexY + 1, idX].GetHashCode() != -1)) // if inside of solid block
         {
             x = (idX + 1) * BlockSize - morio.x;
             // move morio right
@@ -118,21 +118,16 @@ class Game
             // morio.SetGrounded();
         }
 
-        if (x != 0) {
+        if (x != 0 && Math.Abs(x) < Math.Abs(y)) {
             morio.x = (int)((morio.x + x) / BlockSize) * BlockSize;
             // morio.x += x;
             morio.vel.X = 0;
             Console.WriteLine("x is " + morio.x);
         } else if (y != 0) {
-            // morio.y = (int)((morio.y + y) / BlockSize) * BlockSize;
-            // morio.SetGrounded();
+            morio.y = (int)((morio.y + y) / BlockSize) * BlockSize;
+            morio.SetGrounded();
             // Console.WriteLine("y is " + y);
         }
-        // if (morio.y > 5 * BlockSize) {
-        //     morio.y = 5 * BlockSize;
-        //     morio.SetGrounded();
-        // }
-
     }
 
     public void Render()
